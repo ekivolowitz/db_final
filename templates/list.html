@@ -1,0 +1,8 @@
+{% extends "home.html" %}
+{% block body %}
+<ul class="rows">
+    {% for row in rows %}
+        <li><h2>{{ row.Name }}</h2></li>
+    {% endfor %}
+</ul>
+{% endblock %}

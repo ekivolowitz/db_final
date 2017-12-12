@@ -1,7 +1,13 @@
 <!doctype html>
 <html>
+  <head>
+      <script type=text/javascript src="{{ url_for('static', filename='api.js') }}"></script>
+  </head>
   <body>
-    <p><a href="/enternew">Add</a></p>
-    <p><a href="list">List</a></p>
+    <p><a href="/">Home</a></p>
+      
+    <!-- <p><a href="/enternew">Add</a></p> -->
+    <p><a href="/query">Search for things</a></p>
+    {% block body %}{% endblock %}
   </body>
 </html>

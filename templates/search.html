@@ -1,0 +1,60 @@
+{% extends "home.html" %}
+{% block body %}
+<h1>Find your student below!</h1>
+<div>
+    <h2>Student Search</h2>
+    <form method="POST" action="{{ url_for('queryStudent') }}">
+        <input name="id" placeholder="StudentID">
+        <input type="submit">
+    </form>
+</div>
+<br>
+<div>
+    <h2>Course Search</h2>
+    <form method="POST" action="{{ url_for('queryCourse') }}">
+        <input name="cid" placeholder="CourseID">
+        <input type="submit">
+    </form>
+</div>
+<br>
+<div>
+    <h2>Dept Search</h2>
+    <form method="POST" action="{{ url_for('queryDepartment') }}">
+        <input name="dept_id" placeholder="Dept ID">
+        <input type="submit">
+    </form>
+</div>
+
+<div>
+    <h2>Results</h2>
+    <ul id="student" id="queriedId" id="queryType" id="course">
+        {% if queryType == 'Student' %}
+            {% if student is not none %}
+                {% for val in student %}
+                    <li><h3>{{ val }}</h3></li>
+                {% endfor %}
+            {% else %}
+                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
+            {% endif %}
+        {% elif queryType == 'Course' %}
+            {% if course is not none %}
+                {% for val in course %}
+                    <li><h3>{{ val }} </h3></li>
+                {% endfor %}
+            {% else %}
+                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table</h3>
+            {% endif %}
+        {% elif queryType == 'Department' %}
+            {% if department is not none %}
+                {% for val in department %}
+                    <li><h3> {{ val }} </h3></li>
+                {% endfor %}
+            {% else %}
+                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
+        
+            {% endif %}
+        {% endif %}    
+    </ul>
+</div>
+
+{% endblock %}
