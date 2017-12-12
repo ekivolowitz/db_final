@@ -48,6 +48,8 @@ def queryStudent():
         cur = con.cursor()
         cur.execute("select * from Student s where s.StudentId = " + val)
         row = cur.fetchone()
+        if row is None:
+            raise IOError
         return render_template('search.html', student=row, queryType = "Student")
     except:
         return render_template('search.html', student = None, queriedId = val, queryType = "Student")
