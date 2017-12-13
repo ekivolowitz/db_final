@@ -55,12 +55,259 @@
               <br>
               <div class="table-responsive">
                 <table class="table table-striped">
+                  {% if queryType == "Admin" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>ROOM NUMBER</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Building" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>DEPARTMENT ID</th>
+                        <th>NAME</th>
+                        <th>NUMBER OF ROOMS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "CanEnroll" %}
+                    <thead>
+                      <tr>
+                        <th>STAFF ID</th>
+                        <th>COURSE ID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Chair" %}
+                    <thead>
+                      <tr>
+                        <th>DEPARTMENT ID</th>
+                        <th>STAFF ID</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Course Description" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>CREDITS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Course Instance" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>SEMESTER</th>
+                        <th>YEAR</th>
+                        <th>STAFF ID</th>
+                        <th>IS OPEN</th>
+                        <th>BUILDING ID</th>
+                        <th>ROOM NUMBER</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
                   {% if queryType == "Department" %}
                     <thead>
                       <tr>
                         <th>ID</th>
                         <th>NAME</th>
                         <th>ADDRESS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Professor" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>TENURE</th>
+                        <th>ROOM NUMBER</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Room" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>ROOM NUMBER</th>
+                        <th>CAPACITY</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Staff" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>DEPARTMENT ID</th>
+                        <th>NAME</th>
+                        <th>AGE</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Student" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>YEAR</th>
+                        <th>MAJOR</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Takes" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>COURSE ID</th>
+                        <th>SEMESTER</th>
+                        <th>YEAR</th>
                       </tr>
                     </thead>
                     <tbody>
