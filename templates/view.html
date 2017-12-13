@@ -1,0 +1,123 @@
+{% extends "home.html" %}
+{% block body %}
+
+    <div class="container-fluid">
+      <div class="row">
+        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+          <ul class="nav nav-pills flex-column">
+            <li class="nav-item">
+              <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/query">Search</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/insert">Insert</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="/view">View <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/bonus">Bonus</a>
+            </li>
+          </ul>
+
+        </nav>
+
+        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+          <h1>Find your table below!</h1>
+            <div>
+                <h2>Select View</h2>
+                <form method="POST" action="{{ url_for('viewQuery') }}">
+                    <!-- <input list="table" name="table"> -->
+                    <select name="table">
+                        <option value="Department">Department</option>  
+                        <option value="Student">Student</option> 
+                        <option value="Takes">Takes</option>
+                        <option value="Chair">Chair</option>
+                        <option value="CanEnroll">CanEnroll</option>
+                        <option value="Staff">Staff</option>
+                        <option value="CourseDescription">CourseDescription</option>
+                        <option value="CourseInstance">CourseInstance</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Admin">Admin</option>
+                        <option value="Building">Building</option>
+                        <option value="Room">Room</option>
+                    </select>
+                    <input type="text" name="pageNo" placeholder="Page Number">
+                    <input type="text" name="perPage" placeholder="Per Page">
+                    <input type="submit">   
+                </form>
+            </div>
+
+          <div id="view" id="queryType" id="queriedId">            
+            {% if view is not none %}
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  {% if queryType == "Department" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>ADDRESS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                </table>
+              </div>
+            {% else %}
+
+            {% endif %}
+          </div>
+        </main>
+      </div>
+    </div>
+<br>
+<!-- TODO FEED DATA into custom table -->
+<!-- <div>
+    <h2>Results</h2>
+    <ul id="student" id="queriedId" id="queryType" id="course">
+        {% if queryType == 'Student' %}
+            {% if student is not none %}
+                {% for val in student %}
+                    <li><h3>{{ val }}</h3></li>
+                {% endfor %}
+            {% else %}
+                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
+            {% endif %}
+        {% elif queryType == 'Course' %}
+            {% if course is not none %}
+                {% for val in course %}
+                    <li><h3>{{ val }} </h3></li>
+                {% endfor %}
+            {% else %}
+                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table</h3>
+            {% endif %}
+        {% elif queryType == 'Department' %}
+            {% if department is not none %}
+                {% for val in department %}
+                    <li><h3> {{ val }} </h3></li>
+                {% endfor %}
+            {% else %}
+                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
+        
+            {% endif %}
+        {% endif %}    
+    </ul>
+</div> -->
+
+{% endblock %}

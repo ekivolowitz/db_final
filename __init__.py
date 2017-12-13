@@ -8,32 +8,47 @@ app = Flask(__name__)
 def home():
    return render_template('home.html')
 
-# Test code from Adel's set up instructions.
-# @app.route('/addrec',methods = ['POST', 'GET'])
-# def addrec():
-#    if request.method == 'POST':
-#       try:
-#          nm = request.form['nm']
-#          addr = request.form['add']
-#          city = request.form['city']
-#          pin = request.form['pin']
-         
-#          with sql.connect("database.db") as con:
-#             cur = con.cursor()
-            
-#             cur.execute("INSERT INTO students (name,addr,city,pin) VALUES (?,?,?,?)"
-#                 ,(nm,addr,city,pin) )
-            
-#             con.commit()
-#             msg = "Record successfully added"
-#       except:
-#          con.rollback()
-#          msg = "error in insert operation"
-      
-#       finally:
-#          return render_template("result.html",msg = msg)
-#          con.close()
+@app.route('/view')
+def view():
+    return render_template('view.html')
 
+
+# View Tables query based on name
+@app.route('/viewQuery', methods = ['POST', 'GET'])
+def viewQuery():
+    print("Running here")
+    val = request.form['table']
+    page = request.form['pageNo']
+    perPage = request.form['perPage']
+    page = str(int(page) - 1)
+    
+    offset = int(perPage) * int(page)
+    print("Val is: " + str(val))
+    print("page is: " + str(page))
+    print("perPage is: " + str(perPage))
+    print("Offset is: " + str(offset))
+    try:
+        print("Running try statement")
+        con = sql.connect("data.db")
+        print("Connected to sql")
+        con.row_factory = sql.Row
+        print("Not sure what the row factory does")
+        cur = con.cursor()
+        print("Connected to cursor")
+        # cur.execute("select * from '" + table + "' limit '" + perPage + "' offset '" + offset "'")
+        # cur.execute("select * from " + val + " limit " + perPage + " offset " + offset)
+        cur.execute("select * from " + val + " limit '" + str(perPage) + "' offset '" + str(offset) + "'")
+        rows = cur.fetchall()
+        if rows is None:
+            raise IOError
+        print("Printing rows")
+        for row in rows:
+            print("Row is " + str(row))
+        return render_template('view.html', view = rows, queryType = val)
+    except:
+        print("Rows was none")
+        return render_template('view.html', view = None, queriedId = val, queryType = val)
+   
 @app.route('/query')
 def queryStudentHomePage():
     return render_template('search.html')
@@ -83,7 +98,7 @@ def queryDepartment():
         con.row_factory = sql.Row
     
         cur = con.cursor()
-        cur.execute("select * from Department d where d.DID = '" + val + "'")
+        cur.execute("select s.Name, d.Name FROM Staff s, Chair c, Department d where s.SID = c.SID AND '" + val + "' = c.DID")
         row = cur.fetchone()
         if row is None:
             raise IOError
