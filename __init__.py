@@ -51,34 +51,121 @@ def addDepartmentInsert(deptId, deptName, address, cur):
 def errorCheckHelperDepartment(DID, Name, Address):
     errorString = ""
     if len(DID) > 30:
-        errorString += "Length of DID must be less than 30 characters.\n"
+        errorString += "Length of DID must be less than or equal to 30 characters.\n"
     if len(Name) > 50:
-        errorString += "Length of Name must be less than 50\n"
+        errorString += "Length of Name must be less than or equal to 50 characters.\n"
     if len(Address) > 255:
-        errorString += "Length of Address must be less than 255 characters\n"
+        errorString += "Length of Address must be less than or equal to 255 characters\n"
     return errorString
-def errorCheckHelperStudent():
-    pass
-def errorCheckHelperTakes():
-    pass
-def errorCheckHelperChair():
-    pass
-def errorCheckHelperCanEnroll():
-    pass
-def errorCheckHelperStaff():
-    pass
-def errorCheckHelperCourseDescription():
-    pass
-def errorCheckHelperCourseInstance():
-    pass
-def errorCheckHelperProfessor():
-    pass
-def errorCheckHelperAdmin():
-    pass
-def errorCheckHelperBuilding():
-    pass
-def errorCheckHelperRoom():
-    pass
+def errorCheckHelperStudent(StudentID, Name, Year, Major):
+    errorString = ""
+    if len(StudentID) > 50:
+        errorString += "Length of StudentID must be less than or equal to 50 characters.\n"
+    if len(Name) > 30:
+        errorString += "Length of Name must be less than or equal to 30 characters.\n"
+    if len(Year) > 5:
+        errorString += "Length of Year must be less than or equal to 5 characters\n"
+    if len(Major) > 30:
+        errorString += "Length of Major must be less than or equal to 30 characters.\n"
+    return errorString
+def errorCheckHelperTakes(StudentID, CID, Semester, Year):
+    errorString = ""
+    if len(StudentID) > 50:
+        errorString += "Length of StudentID must be less than or equal to 50 characters.\n"
+    if len(CID) > 50:
+        errorString += "Length of CID must be less than or equal to 50 characters.\n"
+    if len(Year) > 5:
+        errorString += "Length of Year must be less than or equal to 5 characters\n"
+    if len(Semester) > 30:
+        errorString += "Length of Semester must be less than or equal to 30 characters.\n"
+    return errorString
+def errorCheckHelperChair(DID, SID):
+    errorString = ""
+    if len(DID) > 50:
+        errorString += "Length of DID must be less than or equal to 50 characters.\n"
+    if len(SID) > 50:
+        errorString += "Length of SID must be less than or equal to 50 characters.\n"
+    return errorString
+def errorCheckHelperCanEnroll(SID, CID):
+    errorString = ""
+    if len(CID) > 50:
+        errorString += "Length of CID must be less than or equal to 50 characters.\n"
+    if len(SID) > 50:
+        errorString += "Length of SID must be less than or equal to 50 characters.\n"
+    return errorString
+def errorCheckHelperStaff(SID, DID, Name, Age):
+    errorString = ""
+    if len(SID) > 50:
+        errorString += "Length of SID must be less than or equal to 50 characters.\n"
+    if len(DID) > 50:
+        errorString += "Length of DID must be less than or equal to 50 characters.\n"
+    if len(Name) > 30:
+        errorString += "Length of Name must be less than or equal to 30 characters\n"
+    if Age < 0:
+        errorString += "Age must be greater than  or equal to 0.\n"
+    return errorString
+def errorCheckHelperCourseDescription(CID, Name, Credits):
+    errorString = ""
+    if len(CID) > 50:
+        errorString += "Length of CID must be less than or equal to 50 characters.\n"
+    if len(Name) > 30:
+        errorString += "Length of Name must be less than or equal to 30 characters\n"
+    if Credits < 1:
+        errorString += "Credits must be greater than 0.\n"
+    return errorString
+def errorCheckHelperCourseInstance(CID, Semester, Year, SID, IsOpen, BID, RoomNumber):
+    errorString = ""
+    if len(CID) > 50:
+        errorString += "Length of CID must be less than or equal to 50 characters.\n"
+    if len(Semester) > 30:
+        errorString += "Length of Semester must be less than or equal to 30 characters.\n"
+    if len(Year) > 5:
+        errorString += "Length of Year must be less than or equal to 5 characters\n"
+    if len(SID) > 50:
+        errorString += "Length of SID must be less than or equal to 50 characters.\n"
+    if IsOpen < 0 or IsOpen > 1:
+        errorString += "IsOpen must be 0 or 1.\n"
+    if len(BID) > 50:
+        errorString += "Length of BID must be less than or equal to 50 characters.\n"
+    if len(RoomNumber) > 10:
+        errorString += "Length of RoomNumber must be less than or equal to 10 characters.\n"
+    return errorString
+def errorCheckHelperProfessor(SID, Tenure, RoomNumber):
+    errorString = ""
+    if len(SID) > 50:
+        errorString += "Length of SID must be less than or equal to 50 characters.\n"
+    if !isinstance(Tenure, bool):
+        errorString += "Tenure must be a boolean value.\n"
+    if len(RoomNumber) > 10:
+        errorString += "Length of RoomNumber must be less than or equal to 10 characters.\n"
+    return errorString
+def errorCheckHelperAdmin(SID, RoomNumber):
+    errorString = ""
+    if len(SID) > 50:
+        errorString += "Length of SID must be less than or equal to 50 characters.\n"
+    if len(RoomNumber) > 10:
+        errorString += "Length of RoomNumber must be less than or equal to 10 characters.\n"
+    return errorString
+def errorCheckHelperBuilding(BID, DID, Name, NumRooms):
+    errorString = ""
+    if len(BID) > 50:
+        errorString += "Length of BID must be less than or equal to 50 characters.\n"
+    if len(DID) > 50:
+        errorString += "Length of DID must be less than or equal to 50 characters.\n"
+    if len(Name) > 30:
+        errorString += "Length of Name must be less than or equal to 30 characters\n"
+    if NumRooms < 0:
+        errorString += "NumRooms must be greater than or equal to 0.\n"
+    return errorString
+def errorCheckHelperRoom(BID, RoomNumber, Capacity):
+    errorString = ""
+    if len(BID) > 50:
+        errorString += "Length of BID must be less than or equal to 50 characters.\n"
+    if len(RoomNumber) > 10:
+        errorString += "Length of RoomNumber must be less than or equal to 10 characters\n"
+    if Capacity < 0:
+        errorString += "Capacity must be greater than or equal to 0.\n"
+    return errorString
 
 
 @app.route('/addDepartment', methods = ['POST', 'GET'])
