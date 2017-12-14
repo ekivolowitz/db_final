@@ -1,0 +1,12 @@
+{
+   "Admin": [
+      {
+         "SID": "SID1",
+         "RoomNumber": "RoomNumber1"
+      },
+      {
+         "SID": "SID2",
+         "RoomNumber": "RoomNumber2"
+      }
+   ]
+}

@@ -1,0 +1,15 @@
+{ "Building": [
+      {
+      "BID": "BID1",
+      "DID": "DID1",
+      "Name": "BuildingName1",
+      "NumRooms": 1
+      },
+      {
+      "BID": "BID2",
+      "DID": "DID2",
+      "Name": "BuildingName2",
+      "NumRooms": 1
+      }
+   ]
+}

@@ -1,0 +1,14 @@
+{
+	"Professor": [
+      {
+         "SID": "SID1",
+         "Tenure": 1,
+         "RoomNumber": "RoomNumber1"
+      },
+      {
+         "SID": "SID2",
+         "Tenure": 1,
+         "RoomNumber": "RoomNumber2"
+      }
+   ]
+}

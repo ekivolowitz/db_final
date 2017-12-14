@@ -1,0 +1,12 @@
+{
+	"Chair": [
+      {
+         "DID": "DID1",
+         "SID": "SID1"
+      },
+      {
+      	"DID": "DID2",
+      	"SID": "SID2"
+      }
+   ]
+}

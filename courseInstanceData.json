@@ -1,0 +1,22 @@
+{
+	"CourseInstance": [
+      {
+         "CID": "CID1",
+         "Semester": "Fall",
+         "Year": "2017",
+         "SID": "SID1",
+         "IsOpen": 1,
+         "BID": "BID1",
+         "RoomNumber": "RoomNumber1"
+      },
+      {
+         "CID": "CID2",
+         "Semester": "Fall",
+         "Year": "2017",
+         "SID": "SID2",
+         "IsOpen": 0,
+         "BID": "BID2",
+         "RoomNumber": "RoomNumber2"
+      }
+   ]
+}

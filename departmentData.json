@@ -1,0 +1,13 @@
+{"Department": [
+      {
+         "DID": "DID1",
+         "Name": "DeptName1",
+         "Address": "Address1"
+      },
+      {
+         "DID": "DID2",
+         "Name": "DeptName2",
+         "Address": "Address2"
+      }
+   ]
+}

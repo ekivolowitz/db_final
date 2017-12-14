@@ -1,0 +1,14 @@
+{
+	"Room": [
+      {
+         "BID": "BID1",
+         "RoomNumber": "RoomNumber1",
+         "Capacity": 1
+      },
+      {
+         "BID": "BID2",
+         "RoomNumber": "RoomNumber2",
+         "Capacity": 2
+      }
+   ]
+}

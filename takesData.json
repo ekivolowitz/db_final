@@ -1,0 +1,16 @@
+{
+	"Takes": [
+      {
+         "StudentID": "StudentID1",
+         "CID": "CID1",
+         "Semester": "Fall",
+         "Year": "2017"
+      },
+      {
+         "StudentID": "StudentID2",
+         "CID": "CID2",
+         "Semester": "Fall",
+         "Year": "2017"
+      }
+   ]
+}

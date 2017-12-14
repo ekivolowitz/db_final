@@ -1,0 +1,14 @@
+{
+"CourseDescription": [
+      {
+         "CID": "CID1",
+         "Name": "CourseName1",
+         "Credits": 1
+      },
+      {
+         "CID": "CID2",
+         "Name": "CourseName2",
+         "Credits": 2
+      }
+   ]
+}
