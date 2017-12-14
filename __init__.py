@@ -149,12 +149,23 @@ def errorCheckHelperBuilding():
 def errorCheckHelperRoom():
     pass
 
+def valueIsNotInDB(cur, sqlStatement):
+    cur.execute(sqlStatement)
+    row = cur.fetchone()
+    if row is not None:
+        return True
+    return False
+
 
 @app.route('/addDepartment', methods = ['POST', 'GET'])
 def addDepartment():
-    if request.form['file'] == "":
+    with sql.connect('data.db') as con:
+        con.row_factory = sql.Row
+        cur = con.cursor()if request.form['file'] == "":
+        sqlStatement = "select * from {} where {}"
         jsonInput = request.form['input']
         jsonValue = json.loads(jsonInput)
+        
         if len(jsonValue) > 1:
             # ERROR
             pass
@@ -165,8 +176,15 @@ def addDepartment():
                     Name = element['Name']
                     Address = element['Address']
                 except:
-                    #ERROR 
+                    #ERROR  did not have a field did, name, or address
                     pass
+                search = sqlStatement.format(element, "DID = " + DID)
+                if valueIsNotInDB(cur, search):
+                    # insert
+                    addDepartmentInsert(cur, DID, Name, Address)
+                else:
+                    # ERROR value was already in the database.
+                
             elif element == "Student":
                 try:
                     StudentID = element['StudentID']
