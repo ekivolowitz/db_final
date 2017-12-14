@@ -53,45 +53,45 @@ def addStudentInsert(cur, StudentID, Name, Year, Major):
     sqlCommand = "INSERT INTO Student (StudentID, Name, Year, Major) VALUES(?, ?, ?, ?)"
     cur.execute(sqlCommand, (StudentID, Name, Year, Major))
 
-# TODO
-def addTakesInsert(cur,):
-    pass
+# # TODO
+# def addTakesInsert(cur,):
+#     pass
 
-# TODO
-def addChairInsert(cur,):
-    pass
+# # TODO
+# def addChairInsert(cur,):
+#     pass
 
-# TODO
-def addCanEnrollInsert(cur,):
-    pass
+# # TODO
+# def addCanEnrollInsert(cur,):
+#     pass
 
-# TODO
-def addStaffInsert(cur,):
-    pass
+# # TODO
+# def addStaffInsert(cur,):
+#     pass
 
-# TODO
-def addCourseDescriptionInsert(cur,):
-    pass
+# # TODO
+# def addCourseDescriptionInsert(cur,):
+#     pass
 
-# TODO
-def addCourseInstanceInsert(cur,):
-    pass
+# # TODO
+# def addCourseInstanceInsert(cur,):
+#     pass
 
-# TODO
-def addProfessorInsert(cur,):
-    pass
+# # TODO
+# def addProfessorInsert(cur,):
+#     pass
 
-# TODO
-def addAdminInsert(cur,):
-    pass
+# # TODO
+# def addAdminInsert(cur,):
+#     pass
 
-# TODO
-def addBuildingInsert(cur,):
-    pass
+# # TODO
+# def addBuildingInsert(cur,):
+#     pass
 
-# TODO
-def addRoomInsert(cur,):
-    pass
+# # TODO
+# def addRoomInsert(cur,):
+#     pass
 
 
 # TODO
@@ -181,7 +181,7 @@ def errorCheckHelperProfessor(SID, Tenure, RoomNumber):
     errorString = ""
     if len(SID) > 50:
         errorString += "Length of SID must be less than or equal to 50 characters.\n"
-    if int(Tenure) < 0 or int(Tenure) > 1
+    if int(Tenure) < 0 or int(Tenure) > 1:
         errorString += "Tenure must be a boolean value.\n"
     if len(RoomNumber) > 10:
         errorString += "Length of RoomNumber must be less than or equal to 10 characters.\n"
@@ -214,10 +214,12 @@ def errorCheckHelperRoom(BID, RoomNumber, Capacity):
         errorString += "Capacity must be greater than or equal to 0.\n"
     return errorString
 
-def valueIsNotInDB(cur, sqlStatement):
+def valueIsInDB(cur, sqlStatement):
     cur.execute(sqlStatement)
     row = cur.fetchone()
     if row is not None:
+        for val in row:
+            print("Val is " + val)
         return True
     return False
 
@@ -226,124 +228,131 @@ def valueIsNotInDB(cur, sqlStatement):
 def addDepartment():
     with sql.connect('data.db') as con:
         con.row_factory = sql.Row
-        cur = con.cursor()if request.form['file'] == "":
-        sqlStatement = "select * from {} where {}"
-        jsonInput = request.form['input']
-        jsonValue = json.loads(jsonInput)
-        
-        if len(jsonValue) > 1:
-            # ERROR
-            pass
-        for element in jsonValue:
-            if element == "Department":
-                try:
-                    DID = element['DID']
-                    Name = element['Name']
-                    Address = element['Address']
-                except:
-                    #ERROR  did not have a field did, name, or address
-                    pass
-                search = sqlStatement.format(element, "DID = " + DID)
-                if valueIsNotInDB(cur, search):
-                    # insert
-                    addDepartmentInsert(cur, DID, Name, Address)
-                else:
-                    # ERROR value was already in the database.
-                
-            elif element == "Student":
-                try:
-                    StudentID = element['StudentID']
-                    Name = element['Name']
-                    Year = element['Year']
-                    Major = element['Major']
-                except:
-                    # ERROR
-                    pass
-            elif element == "Takes":
-                try:
-                    StudentID = element['StudentID']
-                    CID = element['CID']
-                    Semester = element['Semester']
-                    Year = element['Year']
-                except:
-                    # ERROR
-                    pass
-            elif element == "Chair":
-                try:
-                    DID = element['DID']
-                    SID = element['SID']
-                except:
-                    # ERROR 
-                    pass 
-            elif element == "CanEnroll":
-                try:
-                    SID = element['SID']
-                    CID = element['CID']
-                except:
-                    # ERROR
-                    pass
-            elif element == "Staff":
-                try:
-                    SID = element['SID']
-                    DID = element['DID']
-                    Name = element['Name']
-                    Age = int(element['Age'])
-                except:
-                    # ERROR 
-                    pass
-            elif element == "CourseDescription":
-                try:
-                    CID = element['CID']
-                    Name = element['Name']
-                    Credits = element['Credits']
-                except:
-                    # ERROR 
-                    pass
-            elif element == "CourseInstance":
-                try:
-                    CID = element['CID']
-                    Semester = element['Semester']
-                    Year = element['Year']
-                    SID = element['SID']
-                    IsOpen = element['IsOpen']
-                    BID = element['BID']
-                    RoomNumber = element['RoomNumber']
-                except:
-                    # ERROR 
-                    pass
-            elif element == "Professor":
-                try:
-                    SID = element['SID']
-                    Tenure = element['Tenure']
-                    RoomNumber = element['RoomNumber']
-                except:
-                    # ERROR
-                    pass
-            elif element == "Admin":
-                try:
-                    SID = element['SID']
-                    RoomNumber = element['RoomNumber']
-                except:
-                    # ERROR 
-                    pass
-            elif element == "Building":
-                try:
-                    BID = element['BID']
-                    DID = element['DID']
-                    Name = element['Name']
-                    NumRooms = element['NumRooms']
-                except:
-                    pass
-            elif element == "Room":
-                try:
-                    BID = element['BID']
-                    RoomNumber = element['RoomNumber']
-                    Capacity = element['Capacity']
-                except:
-                    # ERROR
-                    pass
-            else:
+        cur = con.cursor()
+        if request.form['file'] == "":
+            sqlStatement = "select * from {} where {}"
+            jsonInput = request.form['input']
+            jsonValue = json.loads(jsonInput)
+            print("Got here")
+            if len(jsonValue) > 1:
+                # ERROR
                 pass
+            print("JSON Value is 1")
+            for element in jsonValue:
+                print(element)
+                if element == "Department":
+                    print("In Department")
+                    try:
+                        DID = jsonValue[element][0]['DID']
+                        Name = jsonValue[element][0]['Name']
+                        Address = jsonValue[element][0]['Address']
+                        search = sqlStatement.format(element, "DID = '" + DID + "'")
+                        if not valueIsInDB(cur, search):
+                            # insert
+                            addDepartmentInsert(cur, DID, Name, Address)
+                        else:
+                            # ERROR value was already in the database.
+                            print("Value in DB")
+                            pass
+                    except:
+                        #ERROR  did not have a field did, name, or address
+                        pass
+                    
+                    
+                elif element == "Student":
+                    try:
+                        StudentID = element['StudentID']
+                        Name = element['Name']
+                        Year = element['Year']
+                        Major = element['Major']
+                    except:
+                        # ERROR
+                        pass
+                elif element == "Takes":
+                    try:
+                        StudentID = element['StudentID']
+                        CID = element['CID']
+                        Semester = element['Semester']
+                        Year = element['Year']
+                    except:
+                        # ERROR
+                        pass
+                elif element == "Chair":
+                    try:
+                        DID = element['DID']
+                        SID = element['SID']
+                    except:
+                        # ERROR 
+                        pass 
+                elif element == "CanEnroll":
+                    try:
+                        SID = element['SID']
+                        CID = element['CID']
+                    except:
+                        # ERROR
+                        pass
+                elif element == "Staff":
+                    try:
+                        SID = element['SID']
+                        DID = element['DID']
+                        Name = element['Name']
+                        Age = int(element['Age'])
+                    except:
+                        # ERROR 
+                        pass
+                elif element == "CourseDescription":
+                    try:
+                        CID = element['CID']
+                        Name = element['Name']
+                        Credits = element['Credits']
+                    except:
+                        # ERROR 
+                        pass
+                elif element == "CourseInstance":
+                    try:
+                        CID = element['CID']
+                        Semester = element['Semester']
+                        Year = element['Year']
+                        SID = element['SID']
+                        IsOpen = element['IsOpen']
+                        BID = element['BID']
+                        RoomNumber = element['RoomNumber']
+                    except:
+                        # ERROR 
+                        pass
+                elif element == "Professor":
+                    try:
+                        SID = element['SID']
+                        Tenure = element['Tenure']
+                        RoomNumber = element['RoomNumber']
+                    except:
+                        # ERROR
+                        pass
+                elif element == "Admin":
+                    try:
+                        SID = element['SID']
+                        RoomNumber = element['RoomNumber']
+                    except:
+                        # ERROR 
+                        pass
+                elif element == "Building":
+                    try:
+                        BID = element['BID']
+                        DID = element['DID']
+                        Name = element['Name']
+                        NumRooms = element['NumRooms']
+                    except:
+                        pass
+                elif element == "Room":
+                    try:
+                        BID = element['BID']
+                        RoomNumber = element['RoomNumber']
+                        Capacity = element['Capacity']
+                    except:
+                        # ERROR
+                        pass
+                else:
+                    pass
 
         # if len(deptId) > 30 or len(deptName) > 50 or len(address) > 255:
         #     print("In the error string")
@@ -372,35 +381,35 @@ def addDepartment():
 
         # except:
         #     return render_template('insert.html', error = "ERROR: INSERTION ERROR", ran = 1)
-    else:
-        try:
-            
-            j = open(request.form['file'], 'r')
-            
-            jsonFile = json.load(j)
-            pprint(jsonFile)
-            errorString = ""
-            with sql.connect('data.db') as con:
-                con.row_factory = sql.Row
-                cur = con.cursor()
-                for dept in jsonFile:
-                    print(dept)
-                    cur.execute("select * from Department where DID = '" + dept + "'")
-                    print("Finished query to check if it exists")
-                    row = cur.fetchone()
-                    if row is not None:
-                        # print("DepartmentID exists already")
-                        errorString += "A department with Department ID " + dept + " already exists.\n"
+        else:
+            try:
+                
+                j = open(request.form['file'], 'r')
+                
+                jsonFile = json.load(j)
+                pprint(jsonFile)
+                errorString = ""
+                with sql.connect('data.db') as con:
+                    con.row_factory = sql.Row
+                    cur = con.cursor()
+                    for dept in jsonFile:
+                        print(dept)
+                        cur.execute("select * from Department where DID = '" + dept + "'")
+                        print("Finished query to check if it exists")
+                        row = cur.fetchone()
+                        if row is not None:
+                            # print("DepartmentID exists already")
+                            errorString += "A department with Department ID " + dept + " already exists.\n"
+                        else:
+                            addDepartmentInsert(dept, jsonFile[dept]['Name'], jsonFile[dept]['Address'], cur)
+                    
+                    
+                    if errorString == "":
+                        return render_template('insert.html', error = None, ran = 1)
                     else:
-                        addDepartmentInsert(dept, jsonFile[dept]['Name'], jsonFile[dept]['Address'], cur)
-                
-                
-                if errorString == "":
-                    return render_template('insert.html', error = None, ran = 1)
-                else:
-                    return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
-        except:
-            print("Error in the bulk upload.")
+                        return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
+            except:
+                print("Error in the bulk upload.")
     return render_template("insert.html")
 
 
@@ -477,14 +486,13 @@ def queryDepartment():
         con.row_factory = sql.Row
     
         cur = con.cursor()
-        cur.execute("select s.Name, d.Name FROM Staff s, Chair c, Department d where s.SID = c.SID AND '" + val + "' = c.DID")
+        cur.execute("select * from Department d where d.DID = '" + val + "'")
         row = cur.fetchone()
         if row is None:
             raise IOError
         return render_template('search.html', department = row, queryType = 'Department')
     except:
         return render_template('search.html', department = None, queriedId = val, queryType = 'Department')
-
 
 if __name__ == '__main__':
    app.run(debug = True)
