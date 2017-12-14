@@ -76,7 +76,7 @@ def addTakesInsert(cur, StudentID, CID, Semester, Year):
     cur.execute(sqlCommand, (StudentID, CID, Semester, Year))
 
 def addChairInsert(cur, DID, SID):
-    sqlCommand = "INSERT INTO Chair (DID, Name) VALUES(?, ?)"
+    sqlCommand = "INSERT INTO Chair (DID, SID) VALUES(?, ?)"
     cur.execute(sqlCommand, (DID, SID))
 
 def addCanEnrollInsert(cur, SID, CID):
@@ -234,8 +234,6 @@ def valueIsInDB(cur, sqlStatement):
     cur.execute(sqlStatement)
     row = cur.fetchone()
     if row is not None:
-        for val in row:
-            print("Val is " + val)
         return True
     return False
 
@@ -247,8 +245,11 @@ def addDepartment():
         cur = con.cursor()
         if request.form['file'] == "":
             sqlStatement = "select * from {} where {}"
-            jsonInput = request.form['input']
-            jsonValue = json.loads(jsonInput)
+            try:
+                jsonInput = request.form['input']
+                jsonValue = json.loads(jsonInput)
+            except:
+                return render_template("insert.html", error = "Malformatted JSON")
             print("Got here")
             if len(jsonValue) > 1:
                 # ERROR
@@ -281,7 +282,8 @@ def addDepartment():
                         Name = jsonValue[element][0]['Name']
                         Year = jsonValue[element][0]['Year']
                         Major = jsonValue[element][0]['Major']
-                        search = sqlStatement.format(element, "Student = '" + StudentID + "'")
+                        search = sqlStatement.format(element, "StudentID = '" + StudentID + "'")
+                        print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addStudentInsert(cur, StudentID, Name, Year, Major)
@@ -301,7 +303,8 @@ def addDepartment():
                         Semester = jsonValue[element][0]['Semester']
                         Year = jsonValue[element][0]['Year']
                         
-                        search = sqlStatement.format(element, "StudentID = '" + StudentID + "'" + "CID = '" + CID + "'" + "Semester = '" + Semester + "'" + "Year = '" + Year + "'")
+                        search = sqlStatement.format(element, "StudentID = '" + StudentID + "' AND " + "CID = '" + CID + "' AND " + "Semester = '" + Semester + "' AND " + "Year = '" + Year + "'")
+                        print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addTakesInsert(cur, StudentID, CID, Semester, Year)
@@ -318,7 +321,8 @@ def addDepartment():
                     try:
                         DID = jsonValue[element][0]['DID']
                         SID = jsonValue[element][0]['SID']
-                        search = sqlStatement.format(element, "DID = '" + DID + "'")
+                        search = sqlStatement.format(element, " DID = '" + DID + "'")
+                        print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addChairInsert(cur, DID, SID)
@@ -335,7 +339,8 @@ def addDepartment():
                     try:
                         SID = jsonValue[element][0]['SID']
                         CID = jsonValue[element][0]['CID']
-                        search = sqlStatement.format(element, "SID = '" + SID + "' CID = '" + CID + "'")
+                        search = sqlStatement.format(element, "SID = '" + SID + "' AND CID = '" + CID + "'")
+                        print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addCanEnrollInsert(cur, SID, CID)
@@ -352,19 +357,24 @@ def addDepartment():
                         SID = jsonValue[element][0]['SID']
                         DID = jsonValue[element][0]['DID']
                         Name = jsonValue[element][0]['Name']
-                        Age = int(jsonValue[element][0]['Age'])
+                        Age = jsonValue[element][0]['Age']
                         search = sqlStatement.format(element, "SID = '" + SID + "'")
+                        print(search)
+                        print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
+                        print("After first check in db")
                         if not valueIsInDB(cur, search):
                             # insert
                             addStaffInsert(cur, SID, DID, Name, Age)
+                            print("Running in db")
                             return render_template("insert.html", error = None)
                         else:
                             # ERROR value was already in the database.
+                            print("Error in staff valueIsInDB true")
                             return render_template("insert.html", error = "Entry already exists in " + element)
                             
                     except:
                         #ERROR  did not have a field did, name, or address
-                        return render_template("insert.html", error = "Invalid JSON. You must have two fields: SID, DID, Name, Age")
+                        return render_template("insert.html", error = "Invalid JSON. You must have four fields: SID, DID, Name, Age")
                 elif element == "CourseDescription":
                     try:
                         CID = jsonValue[element][0]['CID']
@@ -391,7 +401,7 @@ def addDepartment():
                         IsOpen = jsonValue[element][0]['IsOpen']
                         BID = jsonValue[element][0]['BID']
                         RoomNumber = jsonValue[element][0]['RoomNumber']
-                        search = sqlStatement.format(element, "CID = '" + CID + "' Semester = '" + Semester + "' Year = '" + Year + "'")
+                        search = sqlStatement.format(element, "CID = '" + CID + "' AND Semester = '" + Semester + "' AND Year = '" + Year + "'")
                         if not valueIsInDB(cur, search):
                             # insert
                             addCourseInstanceInsert(cur, CID, Semester, Year, SID, IsOpen, BID, RoomNumber)
@@ -459,7 +469,7 @@ def addDepartment():
                         BID = jsonValue[element][0]['BID']
                         RoomNumber = jsonValue[element][0]['RoomNumber']
                         Capacity = jsonValue[element][0]['Capacity']
-                        search = sqlStatement.format(element, "BID = '" + BID + "' RoomNumber = '" + RoomNumber + "'")
+                        search = sqlStatement.format(element, "BID = '" + BID + "' AND RoomNumber = '" + RoomNumber + "'")
                         if not valueIsInDB(cur, search):
                             # insert
                             addRoomInsert(cur, BID, RoomNumber, Capacity)
@@ -473,34 +483,7 @@ def addDepartment():
                         return render_template("insert.html", error = "Invalid JSON. You must have three fields: BID, RoomNumber, Capacity")
                 else:
                     pass
-
-        # if len(deptId) > 30 or len(deptName) > 50 or len(address) > 255:
-        #     print("In the error string")
-        #     errorString = ""
-        #     if len(deptId) > 30:
-        #         errorString += "Department ID cannot be more than 30 characters.\n"
-        #     if len(deptName) > 50:
-        #         errorString += "Department Name cannot be more than 50 characters.\n"
-        #     if len(address) > 255:
-        #         errorString += "Department Address cannot be more than 255 characters.\n"
-        #     return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
         
-        
-        # try:
-        #     with sql.connect('data.db') as con:
-        #         con.row_factory = sql.Row
-        #         cur = con.cursor()
-                
-        #         cur.execute("select * from Department where DID = '" + deptId + "'")
-        #         row = cur.fetchone()
-        #         if row is not None:
-        #             print("DepartmentID exists already")
-        #             return render_template("insert.html", error = "ERROR: A department with Department ID " + deptId + " exists already.", ran = 1)
-        #         addDepartmentInsert(deptId, deptName, address, cur)
-        #         return render_template('insert.html', error = None)
-
-        # except:
-        #     return render_template('insert.html', error = "ERROR: INSERTION ERROR", ran = 1)
         else:
             try:
                 
