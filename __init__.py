@@ -43,11 +43,58 @@ def queryDepartmentBonus():
         return render_template('bonus.html', department = row, queryType = 'Department')
     except:
         return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department')
-
-def addDepartmentInsert(deptId, deptName, address, cur):
+# TODO
+def addDepartmentInsert(cur, deptId, deptName, address):
     sqlCommand = '''INSERT INTO Department (DID, Name, Address) VALUES(?, ?, ?)'''
     cur.execute(sqlCommand, (deptId, deptName, address))
 
+# TODO
+def addStudentInsert(cur, StudentID, Name, Year, Major):
+    sqlCommand = "INSERT INTO Student (StudentID, Name, Year, Major) VALUES(?, ?, ?, ?)"
+    cur.execute(sqlCommand, (StudentID, Name, Year, Major))
+
+# TODO
+def addTakesInsert(cur,):
+    pass
+
+# TODO
+def addChairInsert(cur,):
+    pass
+
+# TODO
+def addCanEnrollInsert(cur,):
+    pass
+
+# TODO
+def addStaffInsert(cur,):
+    pass
+
+# TODO
+def addCourseDescriptionInsert(cur,):
+    pass
+
+# TODO
+def addCourseInstanceInsert(cur,):
+    pass
+
+# TODO
+def addProfessorInsert(cur,):
+    pass
+
+# TODO
+def addAdminInsert(cur,):
+    pass
+
+# TODO
+def addBuildingInsert(cur,):
+    pass
+
+# TODO
+def addRoomInsert(cur,):
+    pass
+
+
+# TODO
 def errorCheckHelperDepartment(DID, Name, Address):
     errorString = ""
     if len(DID) > 30:
@@ -57,26 +104,48 @@ def errorCheckHelperDepartment(DID, Name, Address):
     if len(Address) > 255:
         errorString += "Length of Address must be less than 255 characters\n"
     return errorString
+
+# TODO
 def errorCheckHelperStudent():
     pass
+
+# TODO
 def errorCheckHelperTakes():
     pass
+
+# TODO
 def errorCheckHelperChair():
     pass
+
+# TODO
 def errorCheckHelperCanEnroll():
     pass
+
+# TODO
 def errorCheckHelperStaff():
     pass
+
+# TODO
 def errorCheckHelperCourseDescription():
     pass
+
+# TODO
 def errorCheckHelperCourseInstance():
     pass
+
+# TODO
 def errorCheckHelperProfessor():
     pass
+
+# TODO
 def errorCheckHelperAdmin():
     pass
+
+# TODO
 def errorCheckHelperBuilding():
     pass
+
+# TODO
 def errorCheckHelperRoom():
     pass
 
