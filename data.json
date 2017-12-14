@@ -1,22 +1,96 @@
 {
-   "DID1":{
-      "Address":"A1",
-      "Name":"Name1"
-   },
-   "DID2":{
-      "Address":"A2",
-      "Name":"Name2"
-   },
-   "DID3":{
-      "Address":"A3",
-      "Name":"Name3"
-   },
-   "DID4":{
-      "Address":"A4",
-      "Name":"Name4"
-   },
-   "DID5":{
-      "Address":"A5",
-      "Name":"Name5"
-   }
+   "Admin": [
+      {
+         "SID": "SID1",
+         "RoomNumber": "RoomNumber1"
+      },
+      {
+         "SID": "SID2",
+         "RoomNumber": "RoomNumber2"
+      }
+   ],
+   "Building": [
+      {
+      "BID": "BID1",
+      "DID": "DID1",
+      "Name": "BuildingName1",
+      "NumRooms": 1
+      }
+
+   ],
+   "CanEnroll": [
+      {
+         "SID": "SID1",
+         "CID": "CID1"
+      }
+   ],
+   "Chair": [
+      {
+         "DID": "DID1",
+         "SID": "SID1"
+      }
+   ],
+   "CourseDescription": [
+      {
+         "CID": "CID1",
+         "Name": "CourseName1",
+         "Credits": 1
+      }
+   ],
+   "CourseInstance": [
+      {
+         "CID": "CID1",
+         "Semester": "Fall",
+         "Year": "2017",
+         "SID": "SID1",
+         "IsOpen": 1,
+         "BID": "BID1",
+         "RoomNumber": "RoomNumber1"
+      }
+   ],
+   "Department": [
+      {
+         "DID": "DID1",
+         "Name": "DeptName1",
+         "Address": "Address1"
+      }
+   ],
+   "Professor": [
+      {
+         "SID": "SID1",
+         "Tenure": 1,
+         "RoomNumber": "RoomNumber1"
+      }
+   ],
+   "Room": [
+      {
+         "BID": "BID1",
+         "RoomNumber": "RoomNumber1",
+         "Capacity": 1
+      }
+   ],
+   "Staff": [
+      {
+      "SID": "SID1",
+      "DID": "DID1",
+      "Name": "StaffName1",
+      "Age": 49
+      }
+   ],
+   "Student": [
+      {
+         "StudentID": "StudentID1",
+         "Name": "NameGuy1",
+         "Year": "2222",
+         "Major": "DID1"
+      }
+   ], 
+   "Takes": [
+      {
+         "StudentID": "StudentID1",
+         "CID": "CID1",
+         "Semester": "Fall",
+         "Year": "2017"
+      }
+   ]
 }
