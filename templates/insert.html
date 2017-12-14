@@ -29,9 +29,7 @@
       <div>
         <br> 
           <form method="POST" action="{{ url_for('addDepartment') }}">
-            <input name="did" placeholder="DepartmentId (30 char)">
-            <input name="name" placeholder="Department Name (50 char)">
-            <input name="address" placeholder="Address (255 char)">
+            <textarea type="text" name="input" placeholder="valid json for given table. See documentation."></textarea>
             <input type="submit">
             <br>
             <br><h3>OR</h3><br>

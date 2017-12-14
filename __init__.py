@@ -16,46 +16,210 @@ def view():
 def insert():
     return render_template('insert.html')
 
+@app.route('/bonus')
+def bonus():
+    return render_template('bonus.html')
+
+@app.route('/queryStudentBonus')
+def queryStudentBonus():
+    pass
+
+@app.route('/queryCourseBonus')
+def queryCourseBonus():
+    pass
+
+@app.route('/queryDepartmentBonus', methods=['GET', 'POST'])
+def queryDepartmentBonus():
+    val = request.form['dept_name']
+    try:
+        con = sql.connect("data.db")
+        con.row_factory = sql.Row
+    
+        cur = con.cursor()
+        cur.execute("select * from Department d where d.Name = '" + val + "'")
+        row = cur.fetchone()
+        if row is None:
+            raise IOError
+        return render_template('bonus.html', department = row, queryType = 'Department')
+    except:
+        return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department')
+
 def addDepartmentInsert(deptId, deptName, address, cur):
     sqlCommand = '''INSERT INTO Department (DID, Name, Address) VALUES(?, ?, ?)'''
     cur.execute(sqlCommand, (deptId, deptName, address))
 
+def errorCheckHelperDepartment(DID, Name, Address):
+    errorString = ""
+    if len(DID) > 30:
+        errorString += "Length of DID must be less than 30 characters.\n"
+    if len(Name) > 50:
+        errorString += "Length of Name must be less than 50\n"
+    if len(Address) > 255:
+        errorString += "Length of Address must be less than 255 characters\n"
+    return errorString
+def errorCheckHelperStudent():
+    pass
+def errorCheckHelperTakes():
+    pass
+def errorCheckHelperChair():
+    pass
+def errorCheckHelperCanEnroll():
+    pass
+def errorCheckHelperStaff():
+    pass
+def errorCheckHelperCourseDescription():
+    pass
+def errorCheckHelperCourseInstance():
+    pass
+def errorCheckHelperProfessor():
+    pass
+def errorCheckHelperAdmin():
+    pass
+def errorCheckHelperBuilding():
+    pass
+def errorCheckHelperRoom():
+    pass
+
+
 @app.route('/addDepartment', methods = ['POST', 'GET'])
 def addDepartment():
-    print(request.form['file'])
     if request.form['file'] == "":
-        deptId = request.form['did']
-        deptName = request.form['name']
-        address = request.form['address']
-        
+        jsonInput = request.form['input']
+        jsonValue = json.loads(jsonInput)
+        if len(jsonValue) > 1:
+            # ERROR
+            pass
+        for element in jsonValue:
+            if element == "Department":
+                try:
+                    DID = element['DID']
+                    Name = element['Name']
+                    Address = element['Address']
+                except:
+                    #ERROR 
+                    pass
+            elif element == "Student":
+                try:
+                    StudentID = element['StudentID']
+                    Name = element['Name']
+                    Year = element['Year']
+                    Major = element['Major']
+                except:
+                    # ERROR
+                    pass
+            elif element == "Takes":
+                try:
+                    StudentID = element['StudentID']
+                    CID = element['CID']
+                    Semester = element['Semester']
+                    Year = element['Year']
+                except:
+                    # ERROR
+                    pass
+            elif element == "Chair":
+                try:
+                    DID = element['DID']
+                    SID = element['SID']
+                except:
+                    # ERROR 
+                    pass 
+            elif element == "CanEnroll":
+                try:
+                    SID = element['SID']
+                    CID = element['CID']
+                except:
+                    # ERROR
+                    pass
+            elif element == "Staff":
+                try:
+                    SID = element['SID']
+                    DID = element['DID']
+                    Name = element['Name']
+                    Age = int(element['Age'])
+                except:
+                    # ERROR 
+                    pass
+            elif element == "CourseDescription":
+                try:
+                    CID = element['CID']
+                    Name = element['Name']
+                    Credits = element['Credits']
+                except:
+                    # ERROR 
+                    pass
+            elif element == "CourseInstance":
+                try:
+                    CID = element['CID']
+                    Semester = element['Semester']
+                    Year = element['Year']
+                    SID = element['SID']
+                    IsOpen = element['IsOpen']
+                    BID = element['BID']
+                    RoomNumber = element['RoomNumber']
+                except:
+                    # ERROR 
+                    pass
+            elif element == "Professor":
+                try:
+                    SID = element['SID']
+                    Tenure = element['Tenure']
+                    RoomNumber = element['RoomNumber']
+                except:
+                    # ERROR
+                    pass
+            elif element == "Admin":
+                try:
+                    SID = element['SID']
+                    RoomNumber = element['RoomNumber']
+                except:
+                    # ERROR 
+                    pass
+            elif element == "Building":
+                try:
+                    BID = element['BID']
+                    DID = element['DID']
+                    Name = element['Name']
+                    NumRooms = element['NumRooms']
+                except:
+                    pass
+            elif element == "Room":
+                try:
+                    BID = element['BID']
+                    RoomNumber = element['RoomNumber']
+                    Capacity = element['Capacity']
+                except:
+                    # ERROR
+                    pass
+            else:
+                pass
 
-        if len(deptId) > 30 or len(deptName) > 50 or len(address) > 255:
-            print("In the error string")
-            errorString = ""
-            if len(deptId) > 30:
-                errorString += "Department ID cannot be more than 30 characters.\n"
-            if len(deptName) > 50:
-                errorString += "Department Name cannot be more than 50 characters.\n"
-            if len(address) > 255:
-                errorString += "Department Address cannot be more than 255 characters.\n"
-            return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
+        # if len(deptId) > 30 or len(deptName) > 50 or len(address) > 255:
+        #     print("In the error string")
+        #     errorString = ""
+        #     if len(deptId) > 30:
+        #         errorString += "Department ID cannot be more than 30 characters.\n"
+        #     if len(deptName) > 50:
+        #         errorString += "Department Name cannot be more than 50 characters.\n"
+        #     if len(address) > 255:
+        #         errorString += "Department Address cannot be more than 255 characters.\n"
+        #     return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
         
         
-        try:
-            with sql.connect('data.db') as con:
-                con.row_factory = sql.Row
-                cur = con.cursor()
+        # try:
+        #     with sql.connect('data.db') as con:
+        #         con.row_factory = sql.Row
+        #         cur = con.cursor()
                 
-                cur.execute("select * from Department where DID = '" + deptId + "'")
-                row = cur.fetchone()
-                if row is not None:
-                    print("DepartmentID exists already")
-                    return render_template("insert.html", error = "ERROR: A department with Department ID " + deptId + " exists already.", ran = 1)
-                addDepartmentInsert(deptId, deptName, address, cur)
-                return render_template('insert.html', error = None)
+        #         cur.execute("select * from Department where DID = '" + deptId + "'")
+        #         row = cur.fetchone()
+        #         if row is not None:
+        #             print("DepartmentID exists already")
+        #             return render_template("insert.html", error = "ERROR: A department with Department ID " + deptId + " exists already.", ran = 1)
+        #         addDepartmentInsert(deptId, deptName, address, cur)
+        #         return render_template('insert.html', error = None)
 
-        except:
-            return render_template('insert.html', error = "ERROR: INSERTION ERROR", ran = 1)
+        # except:
+        #     return render_template('insert.html', error = "ERROR: INSERTION ERROR", ran = 1)
     else:
         try:
             
@@ -85,7 +249,7 @@ def addDepartment():
                     return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
         except:
             print("Error in the bulk upload.")
-        return render_template("insert.html")
+    return render_template("insert.html")
 
 
 
