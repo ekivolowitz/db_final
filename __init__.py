@@ -170,7 +170,7 @@ def errorCheckHelperCourseInstance(CID, Semester, Year, SID, IsOpen, BID, RoomNu
         errorString += "Length of Year must be less than or equal to 5 characters\n"
     if len(SID) > 50:
         errorString += "Length of SID must be less than or equal to 50 characters.\n"
-    if IsOpen < 0 or IsOpen > 1:
+    if int(IsOpen) < 0 or int(IsOpen) > 1:
         errorString += "IsOpen must be 0 or 1.\n"
     if len(BID) > 50:
         errorString += "Length of BID must be less than or equal to 50 characters.\n"
@@ -181,7 +181,7 @@ def errorCheckHelperProfessor(SID, Tenure, RoomNumber):
     errorString = ""
     if len(SID) > 50:
         errorString += "Length of SID must be less than or equal to 50 characters.\n"
-    if !isinstance(Tenure, bool):
+    if int(Tenure) < 0 or int(Tenure) > 1
         errorString += "Tenure must be a boolean value.\n"
     if len(RoomNumber) > 10:
         errorString += "Length of RoomNumber must be less than or equal to 10 characters.\n"
