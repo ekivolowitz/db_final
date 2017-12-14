@@ -1,0 +1,11 @@
+{"CanEnroll": [
+      {
+         "SID": "SID1",
+         "CID": "CID1"
+      },
+      {
+      	"SID": "SID2",
+      	"CID": "CID2"
+      }
+   ]
+}

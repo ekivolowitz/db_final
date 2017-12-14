@@ -1,0 +1,16 @@
+{
+	"Student": [
+      {
+         "StudentID": "StudentID1",
+         "Name": "NameGuy1",
+         "Year": "2222",
+         "Major": "DID1"
+      },
+      {
+         "StudentID": "StudentID2",
+         "Name": "NameGuy2",
+         "Year": "2222",
+         "Major": "DID2"
+      }
+   ]
+}
