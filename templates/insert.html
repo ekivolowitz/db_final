@@ -41,12 +41,13 @@
         <br>
     <div id="error" id="inserted" id="ran">
       {% if ran is not none %}
-        {% if error is not none %}
-          <h3>Result:</h3>
+        <h3>Result:</h3>
+        {% if error is not none %}  
           <br>
-          <p>{{ error }}</p>
+          <p>Failed to insert: {{ error }}</p>
         {% else %}
-          <h3>Success</h3>
+          <br>
+          <p>Success<p>
         {% endif %}
       {% endif %}
     </div>

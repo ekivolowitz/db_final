@@ -49,8 +49,8 @@
                 </form>
             </div>
 
-          <div id="view" id="queryType" id="queriedId">            
-            {% if view is not none %}
+          <div id="view" id="queryType" id="queriedId" id="run">            
+            {% if view %}
               <br>
               <div class="table-responsive">
                 <table class="table table-striped">
@@ -71,8 +71,11 @@
                                   <td>N/A</td>
                                 {% endif %}
                               {% endfor %}
+                              
                           </tr>
                         {% endfor %}
+                        {% if not view %}
+                      {% endif %}
                     </tbody>
                   {% endif %}
                   {% if queryType == "Building" %}
@@ -326,7 +329,11 @@
                 </table>
               </div>
             {% else %}
-
+            <br><br>
+              {% if run %}
+                <h1>No Records Found</h1>            
+              {% else %}
+              {% endif %}
             {% endif %}
           </div>
         </main>
