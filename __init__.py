@@ -243,8 +243,10 @@ def addDepartment():
     with sql.connect('data.db') as con:
         con.row_factory = sql.Row
         cur = con.cursor()
+        print(request.form['file'])
+        sqlStatement = "select * from {} where {}"
+
         if request.form['file'] == "":
-            sqlStatement = "select * from {} where {}"
             try:
                 jsonInput = request.form['input']
                 jsonValue = json.loads(jsonInput)
@@ -486,31 +488,259 @@ def addDepartment():
         
         else:
             try:
-                
                 j = open(request.form['file'], 'r')
-                
                 jsonFile = json.load(j)
-                pprint(jsonFile)
+                # pprint(jsonFile)
                 errorString = ""
                 with sql.connect('data.db') as con:
                     con.row_factory = sql.Row
                     cur = con.cursor()
-                    for dept in jsonFile:
-                        print(dept)
-                        cur.execute("select * from Department where DID = '" + dept + "'")
-                        print("Finished query to check if it exists")
-                        row = cur.fetchone()
-                        if row is not None:
-                            # print("DepartmentID exists already")
-                            errorString += "A department with Department ID " + dept + " already exists.\n"
-                        else:
-                            addDepartmentInsert(dept, jsonFile[dept]['Name'], jsonFile[dept]['Address'], cur)
-                    
-                    
-                    if errorString == "":
-                        return render_template('insert.html', error = None, ran = 1)
-                    else:
-                        return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
+                    print("pre val")
+                    # pprint(jsonValue)
+                    for val in jsonFile:
+                        print("Val is")
+
+                        for element in jsonFile[val]:
+                            print("Element is : " + str(element))
+                            print(element['SID'])
+                            print(val)
+                            # if element["Department"]:
+                            if val == "Department":
+                                try:
+                                    DID = jsonValue[element][i]['DID']
+                                    Name = jsonValue[element][i]['Name']
+                                    Address = jsonValue[element][i]['Address']
+                                    search = sqlStatement.format(element, "DID = '" + DID + "'")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addDepartmentInsert(cur, DID, Name, Address)
+                                        # return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        # return render_template("insert.html", error = DID + " already exists in " + element)
+                                        errorString += DID + " already exists in " + element + "\n"
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have three fields: DID, Name, Address")   
+                            elif val == "Student":
+                                try:
+                                    StudentID = jsonValue[element][i]['StudentID']
+                                    Name = jsonValue[element][i]['Name']
+                                    Year = jsonValue[element][i]['Year']
+                                    Major = jsonValue[element][i]['Major']
+                                    search = sqlStatement.format(element, "StudentID = '" + StudentID + "'")
+                                    print(search)
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addStudentInsert(cur, StudentID, Name, Year, Major)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = StudentID + " already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have four fields: StudentID, Name, Year, Major")
+                                    
+                            elif val == "Takes":
+                                try:
+                                    StudentID = jsonValue[element][i]['StudentID']
+                                    CID = jsonValue[element][i]['CID']
+                                    Semester = jsonValue[element][i]['Semester']
+                                    Year = jsonValue[element][i]['Year']
+                                    
+                                    search = sqlStatement.format(element, "StudentID = '" + StudentID + "' AND " + "CID = '" + CID + "' AND " + "Semester = '" + Semester + "' AND " + "Year = '" + Year + "'")
+                                    print(search)
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addTakesInsert(cur, StudentID, CID, Semester, Year)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have four fields: StudentID, CID, Semester, Year")
+
+                            elif val == "Chair":
+                                try:
+                                    DID = jsonValue[element][i]['DID']
+                                    SID = jsonValue[element][i]['SID']
+                                    search = sqlStatement.format(element, " DID = '" + DID + "'")
+                                    print(search)
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addChairInsert(cur, DID, SID)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have two fields: DID, SID")
+
+                            elif val == "CanEnroll":
+                                try:
+                                    SID = jsonValue[element][i]['SID']
+                                    CID = jsonValue[element][i]['CID']
+                                    search = sqlStatement.format(element, "SID = '" + SID + "' AND CID = '" + CID + "'")
+                                    print(search)
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addCanEnrollInsert(cur, SID, CID)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                        return render_template("insert.html", error = "Invalid JSON. You must have two fields: SID, CID")
+                            elif val == "Staff":
+                                try:
+                                    SID = jsonValue[element][i]['SID']
+                                    DID = jsonValue[element][i]['DID']
+                                    Name = jsonValue[element][i]['Name']
+                                    Age = jsonValue[element][i]['Age']
+                                    search = sqlStatement.format(element, "SID = '" + SID + "'")
+                                    print(search)
+                                    print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
+                                    print("After first check in db")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addStaffInsert(cur, SID, DID, Name, Age)
+                                        print("Running in db")
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        print("Error in staff valueIsInDB true")
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have four fields: SID, DID, Name, Age")
+                            elif val == "CourseDescription":
+                                try:
+                                    CID = jsonValue[element][i]['CID']
+                                    Name = jsonValue[element][i]['Name']
+                                    Credits = jsonValue[element][i]['Credits']
+                                    search = sqlStatement.format(element, "CID = '" + CID + "'")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addCourseDescriptionInsert(cur, CID, Name, Credits)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have three fields: CID, Name, Credits")
+                            elif val == "CourseInstance":
+                                try:
+                                    CID = jsonValue[element][i]['CID']
+                                    Semester = jsonValue[element][i]['Semester']
+                                    Year = jsonValue[element][i]['Year']
+                                    SID = jsonValue[element][i]['SID']
+                                    IsOpen = jsonValue[element][i]['IsOpen']
+                                    BID = jsonValue[element][i]['BID']
+                                    RoomNumber = jsonValue[element][i]['RoomNumber']
+                                    search = sqlStatement.format(element, "CID = '" + CID + "' AND Semester = '" + Semester + "' AND Year = '" + Year + "'")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addCourseInstanceInsert(cur, CID, Semester, Year, SID, IsOpen, BID, RoomNumber)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have seven fields: CID, Semester, Year, SID, IsOpen, BID, RoomNumber")
+                            elif val == "Professor":
+                                try:
+                                    SID = jsonValue[element][i]['SID']
+                                    Tenure = jsonValue[element][i]['Tenure']
+                                    RoomNumber = jsonValue[element][i]['RoomNumber']
+                                    search = sqlStatement.format(element, "SID = '" + SID + "'")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addProfessorInsert(cur, SID, Tenure, RoomNumber)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have three fields: SID, Tenure, RoomNumber")
+                            elif val == "Admin":
+                                print("In admin correctly")
+                                try:
+                                    print("Starting getting SID")
+                                    SID = element['SID']
+                                    print("Starting getting RoomNumber")
+                                    RoomNumber = element['RoomNumber']
+                                    print("Starting getting search")
+                                    search = sqlStatement.format(val, "SID = '" + SID + "'")
+                                    print(search)
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addAdminInsert(cur, SID, RoomNumber)
+                                        # return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        # return render_template("insert.html", error = "Entry already exists in " + val)
+                                        errorString += "Entry already exists in " + val + "\n"
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have two fields: SID, RoomNumber")
+                                    # pass
+                                
+                            elif val == "Building":
+                                try:
+                                    BID = jsonValue[element][i]['BID']
+                                    DID = jsonValue[element][i]['DID']
+                                    Name = jsonValue[element][i]['Name']
+                                    NumRooms = jsonValue[element][i]['NumRooms']
+                                    search = sqlStatement.format(element, "BID = '" + BID + "'")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addBuildingInsert(cur, BID, DID, Name, NumRooms)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have four fields: BID, DID, Name, NumRooms")
+                            elif val == "Room":
+                                try:
+                                    BID = jsonValue[element][i]['BID']
+                                    RoomNumber = jsonValue[element][i]['RoomNumber']
+                                    Capacity = jsonValue[element][i]['Capacity']
+                                    search = sqlStatement.format(element, "BID = '" + BID + "' AND RoomNumber = '" + RoomNumber + "'")
+                                    if not valueIsInDB(cur, search):
+                                        # insert
+                                        addRoomInsert(cur, BID, RoomNumber, Capacity)
+                                        return render_template("insert.html", error = None)
+                                    else:
+                                        # ERROR value was already in the database.
+                                        return render_template("insert.html", error = "Entry already exists in " + element)
+                                        
+                                except:
+                                    #ERROR  did not have a field did, name, or address
+                                    return render_template("insert.html", error = "Invalid JSON. You must have three fields: BID, RoomNumber, Capacity")
+                            else:
+                                if errorString == "":
+                                    return render_template('insert.html', error = None, ran = 1)
+                                else:
+                                    return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
             except:
                 print("Error in the bulk upload.")
     return render_template("insert.html")
