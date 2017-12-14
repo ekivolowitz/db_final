@@ -43,58 +43,56 @@ def queryDepartmentBonus():
         return render_template('bonus.html', department = row, queryType = 'Department')
     except:
         return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department')
-# TODO
+
 def addDepartmentInsert(cur, deptId, deptName, address):
-    sqlCommand = '''INSERT INTO Department (DID, Name, Address) VALUES(?, ?, ?)'''
+    sqlCommand = "INSERT INTO Department (DID, Name, Address) VALUES(?, ?, ?)"
     cur.execute(sqlCommand, (deptId, deptName, address))
 
-# TODO
 def addStudentInsert(cur, StudentID, Name, Year, Major):
     sqlCommand = "INSERT INTO Student (StudentID, Name, Year, Major) VALUES(?, ?, ?, ?)"
     cur.execute(sqlCommand, (StudentID, Name, Year, Major))
 
-# TODO
-def addTakesInsert(cur,):
-    pass
+def addTakesInsert(cur, StudentID, CID, Semester, Year):
+    sqlCommand = "INSERT INTO Takes (StudentID, CID, Semester, Year) VALUES(?, ?, ?, ?)"
+    cur.execute(sqlCommand, (StudentID, CID, Semester, Year))
 
-# TODO
-def addChairInsert(cur,):
-    pass
+def addChairInsert(cur, DID, SID):
+    sqlCommand = "INSERT INTO Chair (DID, Name) VALUES(?, ?)"
+    cur.execute(sqlCommand, (DID, SID))
 
-# TODO
-def addCanEnrollInsert(cur,):
-    pass
+def addCanEnrollInsert(cur, SID, CID):
+    sqlCommand = "INSERT INTO CanEnroll (SID, CID) VALUES(?, ?)"
+    cur.execute(sqlCommand, (SID, CID))
 
-# TODO
-def addStaffInsert(cur,):
-    pass
+def addStaffInsert(cur, SID, DID, Name, Age):
+    sqlCommand = "INSERT INTO Staff (SID, DID, Name, Age) VALUES(?, ?, ?, ?)"
+    cur.execute(sqlCommand, (SID, DID, Name, Age))
 
-# TODO
-def addCourseDescriptionInsert(cur,):
-    pass
+def addCourseDescriptionInsert(cur, CID, Name, Credits):
+    sqlCommand = "INSERT INTO CourseDescription (CID, Name, Credits) VALUES(?, ?, ?)"
+    cur.execute(sqlCommand, (CID, Name, Credits))
 
-# TODO
-def addCourseInstanceInsert(cur,):
-    pass
+def addCourseInstanceInsert(cur, CID, Semester, Year, SID, IsOpen, BID, RoomNumber):
+    sqlCommand = "INSERT INTO CourseInstance (CID, Semester, Year, SID, IsOpen, BID, RoomNumber) VALUES(?, ?, ?, ?, ?, ?, ?)"
+    cur.execute(sqlCommand, (CID, Semester, Year, SID, IsOpen, BID, RoomNumber))
 
-# TODO
-def addProfessorInsert(cur,):
-    pass
+def addProfessorInsert(cur, SID, Tenure, RoomNumber):
+    sqlCommand = "INSERT INTO Professor (SID, Tenure, RoomNumber) VALUES(?, ?, ?)"
+    cur.execute(sqlCommand, (SID, Tenure, RoomNumber))
 
-# TODO
-def addAdminInsert(cur,):
-    pass
+def addAdminInsert(cur, SID, RoomNumber):
+    sqlCommand = "INSERT INTO Admin (SID, RoomNumber) VALUES(?, ?)"
+    cur.execute(sqlCommand, (SID, RoomNumber))
 
-# TODO
-def addBuildingInsert(cur,):
-    pass
+def addBuildingInsert(cur, BID, DID, Name, NumRooms):
+    sqlCommand = "INSERT INTO Building (BID, DID, Name, NumRooms) VALUES(?, ?, ?, ?)"
+    cur.execute(sqlCommand, (BID, DID, Name, NumRooms))
 
-# TODO
-def addRoomInsert(cur,):
-    pass
+def addRoomInsert(cur, BID, RoomNumber, Capacity):
+    sqlCommand = "INSERT INTO Room (BID, RoomNumber, Capacity) VALUES(?, ?, ?)"
+    cur.execute(sqlCommand, (BID, RoomNumber, Capacity))
 
 
-# TODO
 def errorCheckHelperDepartment(DID, Name, Address):
     errorString = ""
     if len(DID) > 30:
@@ -148,7 +146,7 @@ def errorCheckHelperStaff(SID, DID, Name, Age):
         errorString += "Length of DID must be less than or equal to 50 characters.\n"
     if len(Name) > 30:
         errorString += "Length of Name must be less than or equal to 30 characters\n"
-    if Age < 0:
+    if int(Age) < 0:
         errorString += "Age must be greater than  or equal to 0.\n"
     return errorString
 def errorCheckHelperCourseDescription(CID, Name, Credits):
@@ -157,7 +155,7 @@ def errorCheckHelperCourseDescription(CID, Name, Credits):
         errorString += "Length of CID must be less than or equal to 50 characters.\n"
     if len(Name) > 30:
         errorString += "Length of Name must be less than or equal to 30 characters\n"
-    if Credits < 1:
+    if int(Credits) < 1:
         errorString += "Credits must be greater than 0.\n"
     return errorString
 def errorCheckHelperCourseInstance(CID, Semester, Year, SID, IsOpen, BID, RoomNumber):
@@ -201,7 +199,7 @@ def errorCheckHelperBuilding(BID, DID, Name, NumRooms):
         errorString += "Length of DID must be less than or equal to 50 characters.\n"
     if len(Name) > 30:
         errorString += "Length of Name must be less than or equal to 30 characters\n"
-    if NumRooms < 0:
+    if int(NumRooms) < 0:
         errorString += "NumRooms must be greater than or equal to 0.\n"
     return errorString
 def errorCheckHelperRoom(BID, RoomNumber, Capacity):
@@ -210,7 +208,7 @@ def errorCheckHelperRoom(BID, RoomNumber, Capacity):
         errorString += "Length of BID must be less than or equal to 50 characters.\n"
     if len(RoomNumber) > 10:
         errorString += "Length of RoomNumber must be less than or equal to 10 characters\n"
-    if Capacity < 0:
+    if int(Capacity) < 0:
         errorString += "Capacity must be greater than or equal to 0.\n"
     return errorString
 
