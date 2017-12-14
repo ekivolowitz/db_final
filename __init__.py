@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from pprint import pprint
 import sqlite3 as sql
+import json
 import sys
 app = Flask(__name__)
 
@@ -11,6 +12,81 @@ def home():
 @app.route('/view')
 def view():
     return render_template('view.html')
+@app.route('/insert')
+def insert():
+    return render_template('insert.html')
+
+def addDepartmentInsert(deptId, deptName, address, cur):
+    sqlCommand = '''INSERT INTO Department (DID, Name, Address) VALUES(?, ?, ?)'''
+    cur.execute(sqlCommand, (deptId, deptName, address))
+
+@app.route('/addDepartment', methods = ['POST', 'GET'])
+def addDepartment():
+    print(request.form['file'])
+    if request.form['file'] == "":
+        deptId = request.form['did']
+        deptName = request.form['name']
+        address = request.form['address']
+        
+
+        if len(deptId) > 30 or len(deptName) > 50 or len(address) > 255:
+            print("In the error string")
+            errorString = ""
+            if len(deptId) > 30:
+                errorString += "Department ID cannot be more than 30 characters.\n"
+            if len(deptName) > 50:
+                errorString += "Department Name cannot be more than 50 characters.\n"
+            if len(address) > 255:
+                errorString += "Department Address cannot be more than 255 characters.\n"
+            return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
+        
+        
+        try:
+            with sql.connect('data.db') as con:
+                con.row_factory = sql.Row
+                cur = con.cursor()
+                
+                cur.execute("select * from Department where DID = '" + deptId + "'")
+                row = cur.fetchone()
+                if row is not None:
+                    print("DepartmentID exists already")
+                    return render_template("insert.html", error = "ERROR: A department with Department ID " + deptId + " exists already.", ran = 1)
+                addDepartmentInsert(deptId, deptName, address, cur)
+                return render_template('insert.html', error = None)
+
+        except:
+            return render_template('insert.html', error = "ERROR: INSERTION ERROR", ran = 1)
+    else:
+        try:
+            
+            j = open(request.form['file'], 'r')
+            
+            jsonFile = json.load(j)
+            pprint(jsonFile)
+            errorString = ""
+            with sql.connect('data.db') as con:
+                con.row_factory = sql.Row
+                cur = con.cursor()
+                for dept in jsonFile:
+                    print(dept)
+                    cur.execute("select * from Department where DID = '" + dept + "'")
+                    print("Finished query to check if it exists")
+                    row = cur.fetchone()
+                    if row is not None:
+                        # print("DepartmentID exists already")
+                        errorString += "A department with Department ID " + dept + " already exists.\n"
+                    else:
+                        addDepartmentInsert(dept, jsonFile[dept]['Name'], jsonFile[dept]['Address'], cur)
+                
+                
+                if errorString == "":
+                    return render_template('insert.html', error = None, ran = 1)
+                else:
+                    return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
+        except:
+            print("Error in the bulk upload.")
+        return render_template("insert.html")
+
 
 
 # View Tables query based on name
@@ -23,30 +99,17 @@ def viewQuery():
     page = str(int(page) - 1)
     
     offset = int(perPage) * int(page)
-    print("Val is: " + str(val))
-    print("page is: " + str(page))
-    print("perPage is: " + str(perPage))
-    print("Offset is: " + str(offset))
+
     try:
-        print("Running try statement")
         con = sql.connect("data.db")
-        print("Connected to sql")
         con.row_factory = sql.Row
-        print("Not sure what the row factory does")
         cur = con.cursor()
-        print("Connected to cursor")
-        # cur.execute("select * from '" + table + "' limit '" + perPage + "' offset '" + offset "'")
-        # cur.execute("select * from " + val + " limit " + perPage + " offset " + offset)
         cur.execute("select * from " + val + " limit '" + str(perPage) + "' offset '" + str(offset) + "'")
         rows = cur.fetchall()
         if rows is None:
             raise IOError
-        print("Printing rows")
-        for row in rows:
-            print("Row is " + str(row))
         return render_template('view.html', view = rows, queryType = val)
     except:
-        print("Rows was none")
         return render_template('view.html', view = None, queriedId = val, queryType = val)
    
 @app.route('/query')

@@ -29,7 +29,6 @@
             <div>
                 <h2>Select View</h2>
                 <form method="POST" action="{{ url_for('viewQuery') }}">
-                    <!-- <input list="table" name="table"> -->
                     <select name="table">
                         <option value="Department">Department</option>  
                         <option value="Student">Student</option> 
@@ -141,7 +140,7 @@
                         {% endfor %}
                     </tbody>
                   {% endif %}
-                  {% if queryType == "Course Description" %}
+                  {% if queryType == "CourseDescription" %}
                     <thead>
                       <tr>
                         <th>ID</th>
@@ -163,7 +162,7 @@
                         {% endfor %}
                     </tbody>
                   {% endif %}
-                  {% if queryType == "Course Instance" %}
+                  {% if queryType == "CourseInstance" %}
                     <thead>
                       <tr>
                         <th>ID</th>
@@ -304,7 +303,7 @@
                   {% if queryType == "Takes" %}
                     <thead>
                       <tr>
-                        <th>ID</th>
+                        <th>STUDENT ID</th>
                         <th>COURSE ID</th>
                         <th>SEMESTER</th>
                         <th>YEAR</th>
@@ -334,37 +333,4 @@
       </div>
     </div>
 <br>
-<!-- TODO FEED DATA into custom table -->
-<!-- <div>
-    <h2>Results</h2>
-    <ul id="student" id="queriedId" id="queryType" id="course">
-        {% if queryType == 'Student' %}
-            {% if student is not none %}
-                {% for val in student %}
-                    <li><h3>{{ val }}</h3></li>
-                {% endfor %}
-            {% else %}
-                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
-            {% endif %}
-        {% elif queryType == 'Course' %}
-            {% if course is not none %}
-                {% for val in course %}
-                    <li><h3>{{ val }} </h3></li>
-                {% endfor %}
-            {% else %}
-                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table</h3>
-            {% endif %}
-        {% elif queryType == 'Department' %}
-            {% if department is not none %}
-                {% for val in department %}
-                    <li><h3> {{ val }} </h3></li>
-                {% endfor %}
-            {% else %}
-                <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
-        
-            {% endif %}
-        {% endif %}    
-    </ul>
-</div> -->
-
 {% endblock %}

@@ -1,63 +1,58 @@
+{% extends "home.html" %}
+{% block body %}
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="/">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/query">Search</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/insert">Insert <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/view">View</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/bonus">Bonus</a>
+        </li>
+      </ul>
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    </nav>
 
-    <title>Dashboard Template for Bootstrap</title>
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
-      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
-    <link href="dashboard.css" rel="stylesheet">
-  </head>
-
-  <body>
-
-
-    <div class="container-fluid">
-      <div class="row">
-        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Search</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="#">Insert <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">View</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Bonus</a>
-            </li>
-          </ul>
-
-        </nav>
-
-        <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
-          <h1>Dashboard</h1>
-            WELCOME!
-            <br><br>
-            <h1>Find your student below!</h1>
-          <div>
-              <h2>Student Search</h2>
-              <form method="POST" action="{{ url_for('queryStudent') }}">
-                  <input name="id" placeholder="StudentID">
-                  <input type="submit">
-              </form>
-            </div>
+    <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
+      <h1>Insert a new department!</h1>
+        <br><br>
+      <div>
+        <br> 
+          <form method="POST" action="{{ url_for('addDepartment') }}">
+            <input name="did" placeholder="DepartmentId (30 char)">
+            <input name="name" placeholder="Department Name (50 char)">
+            <input name="address" placeholder="Address (255 char)">
+            <input type="submit">
             <br>
-        </main>
+            <br><h3>OR</h3><br>
+            
+            <input type="file" name="file" accept="*.json">
+            <input type="submit">
+          </form>
       </div>
+        <br>
+    <div id="error" id="inserted" id="ran">
+      {% if ran is not none %}
+        {% if error is not none %}
+          <h3>Result:</h3>
+          <br>
+          <p>{{ error }}</p>
+        {% else %}
+          <h3>Success</h3>
+        {% endif %}
+      {% endif %}
     </div>
-  </body>
-</html>
+    </main>
+  </div>
+</div>
+{% endblock %}
