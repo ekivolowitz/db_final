@@ -50,7 +50,7 @@
             </div>
 
           <h2>Section title</h2>
-          <div id="bonus" id="queryType" id="queriedId" id="run" id="department" id="student" id="run">            
+          <div id="bonus" id="queryType" id="queriedId" id="run" id="department" id="student" id="run" id="course">            
             {% if run %}
               <br>
               <div class="table-responsive">
@@ -64,7 +64,7 @@
                       </tr>
                     </thead>
                     <tbody>
-                        {% for row in view %}
+                        {% for row in course %}
                           <tr>
                               {% for val in row %}
                                 {% if val is not none %}
@@ -80,14 +80,12 @@
                   {% if queryType == "Department" %}
                     <thead>
                       <tr>
-                        <th>ID</th>
+                        <th>DEPARTMENT</th>
                         <th>NAME</th>
-                        <th>ADDRESS</th>
-                        <th>CHAIR</th>
                       </tr>
                     </thead>
                     <tbody>
-                        {% for row in view %}
+                        {% for row in department %}
                           <tr>
                               {% for val in row %}
                                 {% if val is not none %}

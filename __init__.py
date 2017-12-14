@@ -43,7 +43,21 @@ def queryStudentBonus():
 
 @app.route('/queryCourseBonus', methods=['POST', 'GET'])
 def queryCourseBonus():
-    pass
+    val = request.form['cname']
+    try:
+        con = sql.connect("data.db")
+        con.row_factory = sql.Row
+
+        cur = con.cursor()
+        cur.execute("select * from CourseDescription c where c.Name like '" + str(val) + "%'")
+        
+        row = cur.fetchall()
+        if row is None:
+            raise IOError
+        return render_template('bonus.html', course = row, queryType = 'CourseDescription', run = 1)
+    except:
+        return render_template('bonus.html', course = None, queriedId = val, queryType = 'CourseDescription', run = 1)
+
 
 @app.route('/queryDepartmentBonus', methods=['GET', 'POST'])
 def queryDepartmentBonus():
@@ -53,13 +67,17 @@ def queryDepartmentBonus():
         con.row_factory = sql.Row
     
         cur = con.cursor()
-        cur.execute("select * from Department d where d.Name like '" + val + "%' limit 150")
+        # cur.execute("select * from Department d where d.Name like '" + val + "%' limit 150")
+        cur.execute("select d.Name, s.Name from Staff s, Department d, Professor p where d.Name like '{}%' AND d.DID = s.DID AND p.SID = s.SID limit 100".format(val))
         row = cur.fetchall()
         if row is None:
             raise IOError
-        return render_template('bonus.html', department = row, queryType = 'Department')
+        for val in row:
+            for x in val:
+                print(x)
+        return render_template('bonus.html', department = row, queryType = 'Department', run = 1)
     except:
-        return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department')
+        return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department', run = 1)
 
 
 
@@ -754,8 +772,13 @@ def viewQuery():
     val = request.form['table']
     page = request.form['pageNo']
     perPage = request.form['perPage']
-    page = str(int(page) - 1)
     
+    try:
+        page = str(int(page) - 1)
+        if int(perPage) <= 0:
+            perPage = 1
+    except:
+        return render_template("view.html", error = "Invalid input for page or perPage. Must be integers > 0.")
     offset = int(perPage) * int(page)
 
     try:
@@ -815,15 +838,17 @@ def queryCourse():
 def queryDepartment():
     val = request.form['dept_id']
     try:
+        print("Start")
         con = sql.connect("data.db")
         con.row_factory = sql.Row
     
         cur = con.cursor()
-        cur.execute("select s.Name, d.Name FROM Staff s, Chair c, Department d where s.SID = c.SID AND '" + val + "' = c.DID")
-        row = cur.fetchone()
+        # cur.execute("select s.Name, d.Name FROM Staff s, Chair c, Department d where s.SID = c.SID AND '" + val + "' = c.DID")
+        cur.execute("select s.SID, s.Name from Staff s, Department d, Professor p where d.DID = '{}' AND d.DID = s.DID AND p.SID = s.SID limit 100".format(val))
+        row = cur.fetchall()
         if row is None:
             raise IOError
-        return render_template('search.html', department = row, queryType = 'Department')
+        return render_template('search.html', department = row, queryType = 'Department', run = 1)
     except:
         return render_template('search.html', department = None, queriedId = val, queryType = 'Department')
 

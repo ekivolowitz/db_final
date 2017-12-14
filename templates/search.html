@@ -68,13 +68,42 @@
                     <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table</h3>
                 {% endif %}
             {% elif queryType == 'Department' %}
-                {% if department is not none %}
-                    {% for val in department %}
-                        <li><h3> {{ val }} </h3></li>
-                    {% endfor %}
-                {% else %}
-                    <h3>Sorry, '{{ queriedId }}' was not found in the {{ queryType }} table.</h3>
+                <div id="bonus" id="queryType" id="queriedId" id="run" id="department">            
+                    {% if run %}
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                        {% if queryType == "Department" %}
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>NAME</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in department %}
+                                <tr>
+                                    {% for val in row %}
+                                        {% if val is not none %}
+                                        <td>{{ val }}</td>
+                                        {% else %}
+                                        <td>N/A</td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        {% endif %}
+                        </table>
+                    </div>
+                    {% else %}
+                    <br><br>
+                    {% if run %}
+                        <h1>No Records Found</h1>            
+                    {% else %}
+                    {% endif %}
                 {% endif %}
+                </div>
             {% endif %}    
         </ul>
     </div>
