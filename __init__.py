@@ -3,6 +3,7 @@ from pprint import pprint
 import sqlite3 as sql
 import json
 import sys
+import time
 app = Flask(__name__)
 
 @app.route('/')
@@ -28,15 +29,13 @@ def queryStudentBonus():
             con.row_factory = sql.Row
         
             cur = con.cursor()
-            cur.execute("select * from Student s where s.Name like '" + val + "%' limit 150")
+            print(time.time())
+            cur.execute("select * from Student s where s.Name like '" + val + "%' limit 1000")
+            print(time.time())
             rows = cur.fetchall()
             if rows is None:
                 raise IOError
             print("Before printing stuff")
-            for row in rows:
-                print("Row")
-                for val in row:
-                    print("Val in row:" + val)
             return render_template('bonus.html', student=rows, queryType = "Student", run = 1)
         except:
             return render_template('bonus.html', student = None, queriedId = val, queryType = "Student", run = 1)
@@ -516,18 +515,16 @@ def addDepartment():
                     print("pre val")
                     # pprint(jsonValue)
                     for val in jsonFile:
-                        print("Val is")
-
+                        print("Val is: " + str(val))
                         for element in jsonFile[val]:
                             print("Element is : " + str(element))
-                            print(element['SID'])
                             print(val)
                             # if element["Department"]:
                             if val == "Department":
                                 try:
-                                    DID = jsonValue[element]['DID']
-                                    Name = jsonValue[element]['Name']
-                                    Address = jsonValue[element]['Address']
+                                    DID = element['DID']
+                                    Name = element['Name']
+                                    Address = element['Address']
                                     search = sqlStatement.format(val, "DID = '" + DID + "'")
                                     if not valueIsInDB(cur, search):
                                         # insert
@@ -543,10 +540,10 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have three fields: DID, Name, Address")   
                             elif val == "Student":
                                 try:
-                                    StudentID = jsonValue[element]['StudentID']
-                                    Name = jsonValue[element]['Name']
-                                    Year = jsonValue[element]['Year']
-                                    Major = jsonValue[element]['Major']
+                                    StudentID = element['StudentID']
+                                    Name = element['Name']
+                                    Year = element['Year']
+                                    Major = element['Major']
                                     search = sqlStatement.format(val, "StudentID = '" + StudentID + "'")
                                     print(search)
                                     if not valueIsInDB(cur, search):
@@ -562,12 +559,13 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have four fields: StudentID, Name, Year, Major")
                                     
                             elif val == "Takes":
+                                print("We are in Takes...")
                                 try:
-                                    StudentID = jsonValue[element]['StudentID']
-                                    CID = jsonValue[element]['CID']
-                                    Semester = jsonValue[element]['Semester']
-                                    Year = jsonValue[element]['Year']
-                                    
+                                    StudentID = element['StudentID']
+                                    CID = element['CID']
+                                    Semester = element['Semester']
+                                    Year = element['Year']
+                                    print("Takes values")
                                     search = sqlStatement.format(val, "StudentID = '" + StudentID + "' AND " + "CID = '" + CID + "' AND " + "Semester = '" + Semester + "' AND " + "Year = '" + Year + "'")
                                     print(search)
                                     if not valueIsInDB(cur, search):
@@ -584,8 +582,8 @@ def addDepartment():
 
                             elif val == "Chair":
                                 try:
-                                    DID = jsonValue[element]['DID']
-                                    SID = jsonValue[element]['SID']
+                                    DID = element['DID']
+                                    SID = element['SID']
                                     search = sqlStatement.format(val, " DID = '" + DID + "'")
                                     print(search)
                                     if not valueIsInDB(cur, search):
@@ -602,8 +600,8 @@ def addDepartment():
 
                             elif val == "CanEnroll":
                                 try:
-                                    SID = jsonValue[element]['SID']
-                                    CID = jsonValue[element]['CID']
+                                    SID = element['SID']
+                                    CID = element['CID']
                                     search = sqlStatement.format(val, "SID = '" + SID + "' AND CID = '" + CID + "'")
                                     print(search)
                                     if not valueIsInDB(cur, search):
@@ -619,10 +617,10 @@ def addDepartment():
                                         return render_template("insert.html", error = "Invalid JSON. You must have two fields: SID, CID")
                             elif val == "Staff":
                                 try:
-                                    SID = jsonValue[element]['SID']
-                                    DID = jsonValue[element]['DID']
-                                    Name = jsonValue[element]['Name']
-                                    Age = jsonValue[element]['Age']
+                                    SID = element['SID']
+                                    DID = element['DID']
+                                    Name = element['Name']
+                                    Age = element['Age']
                                     search = sqlStatement.format(val, "SID = '" + SID + "'")
                                     print(search)
                                     print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
@@ -642,9 +640,9 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have four fields: SID, DID, Name, Age")
                             elif val == "CourseDescription":
                                 try:
-                                    CID = jsonValue[element]['CID']
-                                    Name = jsonValue[element]['Name']
-                                    Credits = jsonValue[element]['Credits']
+                                    CID = element['CID']
+                                    Name = element['Name']
+                                    Credits = element['Credits']
                                     search = sqlStatement.format(val, "CID = '" + CID + "'")
                                     if not valueIsInDB(cur, search):
                                         # insert
@@ -659,13 +657,13 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have three fields: CID, Name, Credits")
                             elif val == "CourseInstance":
                                 try:
-                                    CID = jsonValue[element]['CID']
-                                    Semester = jsonValue[element]['Semester']
-                                    Year = jsonValue[element]['Year']
-                                    SID = jsonValue[element]['SID']
-                                    IsOpen = jsonValue[element]['IsOpen']
-                                    BID = jsonValue[element]['BID']
-                                    RoomNumber = jsonValue[element]['RoomNumber']
+                                    CID = element['CID']
+                                    Semester = element['Semester']
+                                    Year = element['Year']
+                                    SID = element['SID']
+                                    IsOpen = element['IsOpen']
+                                    BID = element['BID']
+                                    RoomNumber = element['RoomNumber']
                                     search = sqlStatement.format(val, "CID = '" + CID + "' AND Semester = '" + Semester + "' AND Year = '" + Year + "'")
                                     if not valueIsInDB(cur, search):
                                         # insert
@@ -680,9 +678,9 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have seven fields: CID, Semester, Year, SID, IsOpen, BID, RoomNumber")
                             elif val == "Professor":
                                 try:
-                                    SID = jsonValue[element]['SID']
-                                    Tenure = jsonValue[element]['Tenure']
-                                    RoomNumber = jsonValue[element]['RoomNumber']
+                                    SID = element['SID']
+                                    Tenure = element['Tenure']
+                                    RoomNumber = element['RoomNumber']
                                     search = sqlStatement.format(val, "SID = '" + SID + "'")
                                     if not valueIsInDB(cur, search):
                                         # insert
@@ -721,10 +719,10 @@ def addDepartment():
                                 
                             elif val == "Building":
                                 try:
-                                    BID = jsonValue[element]['BID']
-                                    DID = jsonValue[element]['DID']
-                                    Name = jsonValue[element]['Name']
-                                    NumRooms = jsonValue[element]['NumRooms']
+                                    BID = element['BID']
+                                    DID = element['DID']
+                                    Name = element['Name']
+                                    NumRooms = element['NumRooms']
                                     search = sqlStatement.format(val, "BID = '" + BID + "'")
                                     if not valueIsInDB(cur, search):
                                         # insert
@@ -739,9 +737,9 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have four fields: BID, DID, Name, NumRooms")
                             elif val == "Room":
                                 try:
-                                    BID = jsonValue[element]['BID']
-                                    RoomNumber = jsonValue[element]['RoomNumber']
-                                    Capacity = jsonValue[element]['Capacity']
+                                    BID = element['BID']
+                                    RoomNumber = element['RoomNumber']
+                                    Capacity = element['Capacity']
                                     search = sqlStatement.format(val, "BID = '" + BID + "' AND RoomNumber = '" + RoomNumber + "'")
                                     if not valueIsInDB(cur, search):
                                         # insert
