@@ -50,17 +50,88 @@
             </div>
 
           <h2>Section title</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>ID</th>
-                  <th>NAME</th>
-                  <th>CHAIR</th>
-                </tr>
-              </thead>
-            </table>
+          <div id="bonus" id="queryType" id="queriedId" id="run" id="department" id="student" id="run">            
+            {% if run %}
+              <br>
+              <div class="table-responsive">
+                <table class="table table-striped">
+                  {% if queryType == "CourseDescription" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>CREDITS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Department" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>ADDRESS</th>
+                        <th>CHAIR</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in view %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                  {% if queryType == "Student" %}
+                    <thead>
+                      <tr>
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>YEAR</th>
+                        <th>MAJOR</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in student %}
+                          <tr>
+                              {% for val in row %}
+                                {% if val is not none %}
+                                  <td>{{ val }}</td>
+                                {% else %}
+                                  <td>N/A</td>
+                                {% endif %}
+                              {% endfor %}
+                          </tr>
+                        {% endfor %}
+                    </tbody>
+                  {% endif %}
+                </table>
+              </div>
+            {% else %}
+            <br><br>
+              {% if run %}
+                <h1>No Records Found</h1>            
+              {% else %}
+              {% endif %}
+            {% endif %}
           </div>
         </main>
       </div>

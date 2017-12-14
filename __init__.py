@@ -20,11 +20,28 @@ def insert():
 def bonus():
     return render_template('bonus.html')
 
-@app.route('/queryStudentBonus')
+@app.route('/queryStudentBonus', methods=['POST', 'GET'])
 def queryStudentBonus():
-    pass
+    val = request.form['studentname']
+    with sql.connect("data.db") as con:
+        try:
+            con.row_factory = sql.Row
+        
+            cur = con.cursor()
+            cur.execute("select * from Student s where s.Name like '" + val + "%' limit 150")
+            rows = cur.fetchall()
+            if rows is None:
+                raise IOError
+            print("Before printing stuff")
+            for row in rows:
+                print("Row")
+                for val in row:
+                    print("Val in row:" + val)
+            return render_template('bonus.html', student=rows, queryType = "Student", run = 1)
+        except:
+            return render_template('bonus.html', student = None, queriedId = val, queryType = "Student", run = 1)
 
-@app.route('/queryCourseBonus')
+@app.route('/queryCourseBonus', methods=['POST', 'GET'])
 def queryCourseBonus():
     pass
 
@@ -36,13 +53,15 @@ def queryDepartmentBonus():
         con.row_factory = sql.Row
     
         cur = con.cursor()
-        cur.execute("select * from Department d where d.Name = '" + val + "'")
-        row = cur.fetchone()
+        cur.execute("select * from Department d where d.Name like '" + val + "%' limit 150")
+        row = cur.fetchall()
         if row is None:
             raise IOError
         return render_template('bonus.html', department = row, queryType = 'Department')
     except:
         return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department')
+
+
 
 def addDepartmentInsert(cur, deptId, deptName, address):
     sqlCommand = "INSERT INTO Department (DID, Name, Address) VALUES(?, ?, ?)"
@@ -499,7 +518,7 @@ def queryDepartment():
         con.row_factory = sql.Row
     
         cur = con.cursor()
-        cur.execute("select * from Department d where d.DID = '" + val + "'")
+        cur.execute("select s.Name, d.Name FROM Staff s, Chair c, Department d where s.SID = c.SID AND '" + val + "' = c.DID")
         row = cur.fetchone()
         if row is None:
             raise IOError
