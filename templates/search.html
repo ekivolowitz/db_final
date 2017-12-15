@@ -26,6 +26,7 @@
     <h1>Find your student below!</h1>
     <div>
         <h2>Student Search</h2>
+        <p>Insert StudentId and click submit to search: output will be Students</p>
         <form method="POST" action="{{ url_for('queryStudent') }}">
             <input name="id" placeholder="StudentID">
             <input type="submit">
@@ -34,6 +35,7 @@
     <br>
     <div>
         <h2>Course Search</h2>
+        <p>Insert CourseID and click submit to search: output will be Courses</p>
         <form method="POST" action="{{ url_for('queryCourse') }}">
             <input name="cid" placeholder="CourseID">
             <input type="submit">
@@ -42,6 +44,7 @@
     <br>
     <div>
         <h2>Dept Search</h2>
+        <p>Insert DepartmentID and click submit to search: output will be professors in the searched department</p>
         <form method="POST" action="{{ url_for('queryDepartment') }}">
             <input name="dept_id" placeholder="Dept ID">
             <input type="submit">

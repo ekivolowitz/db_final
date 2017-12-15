@@ -25,15 +25,17 @@
 
     <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
       <h1>Insert a new department!</h1>
-        <br><br>
       <div>
         <br> 
+        <p>Proper INSERT JSON Format:</p>
+        <p>{"Table Name": [ { “Column1” : “Column1Data”, “Column2”: “Column2data” }]}</p>
           <form method="POST" action="{{ url_for('addDepartment') }}">
             <textarea type="text" name="input" placeholder="valid json for given table. See documentation."></textarea>
             <input type="submit">
             <br>
             <br><h3>OR</h3><br>
-            
+            <p>Proper file Insert Format:</p>
+            <p>'table name'Data.json (No single quotes around table name)</p>
             <input type="file" name="file" accept="*.json">
             <input type="submit">
           </form>
