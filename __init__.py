@@ -29,13 +29,13 @@ def queryStudentBonus():
             con.row_factory = sql.Row
         
             cur = con.cursor()
-            print(time.time())
+            # print(time.time())
             cur.execute("select * from Student s where s.Name like '" + val + "%' limit 1000")
-            print(time.time())
+            # print(time.time())
             rows = cur.fetchall()
             if rows is None:
                 raise IOError
-            print("Before printing stuff")
+            # print("Before printing stuff")
             return render_template('bonus.html', student=rows, queryType = "Student", run = 1)
         except:
             return render_template('bonus.html', student = None, queriedId = val, queryType = "Student", run = 1)
@@ -48,8 +48,10 @@ def queryCourseBonus():
         con.row_factory = sql.Row
 
         cur = con.cursor()
+        # print(time.time())
         cur.execute("select * from CourseDescription c where c.Name like '" + str(val) + "%'")
-        
+        # print(time.time())
+
         row = cur.fetchall()
         if row is None:
             raise IOError
@@ -67,13 +69,12 @@ def queryDepartmentBonus():
     
         cur = con.cursor()
         # cur.execute("select * from Department d where d.Name like '" + val + "%' limit 150")
+        # print(time.time())
         cur.execute("select d.Name, s.Name from Staff s, Department d, Professor p where d.Name like '{}%' AND d.DID = s.DID AND p.SID = s.SID limit 100".format(val))
+        # print(time.time())
         row = cur.fetchall()
         if row is None:
             raise IOError
-        for val in row:
-            for x in val:
-                print(x)
         return render_template('bonus.html', department = row, queryType = 'Department', run = 1)
     except:
         return render_template('bonus.html', department = None, queriedId = val, queryType = 'Department', run = 1)
@@ -260,7 +261,7 @@ def addDepartment():
     with sql.connect('data.db') as con:
         con.row_factory = sql.Row
         cur = con.cursor()
-        print(request.form['file'])
+        # print(request.form['file'])
         sqlStatement = "select * from {} where {}"
 
         if request.form['file'] == "":
@@ -269,13 +270,13 @@ def addDepartment():
                 jsonValue = json.loads(jsonInput)
             except:
                 return render_template("insert.html", error = "Malformatted JSON")
-            print("Got here")
+            # print("Got here")
             if len(jsonValue) > 1:
                 # ERROR
                 pass
-            print("JSON Value is 1")
+            # print("JSON Value is 1")
             for element in jsonValue:
-                print(element)
+                # print(element)
                 if element == "Department":
                     try:
                         DID = jsonValue[element][0]['DID']
@@ -302,7 +303,7 @@ def addDepartment():
                         Year = jsonValue[element][0]['Year']
                         Major = jsonValue[element][0]['Major']
                         search = sqlStatement.format(element, "StudentID = '" + StudentID + "'")
-                        print(search)
+                        # print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addStudentInsert(cur, StudentID, Name, Year, Major)
@@ -323,7 +324,7 @@ def addDepartment():
                         Year = jsonValue[element][0]['Year']
                         
                         search = sqlStatement.format(element, "StudentID = '" + StudentID + "' AND " + "CID = '" + CID + "' AND " + "Semester = '" + Semester + "' AND " + "Year = '" + Year + "'")
-                        print(search)
+                        # print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addTakesInsert(cur, StudentID, CID, Semester, Year)
@@ -341,7 +342,7 @@ def addDepartment():
                         DID = jsonValue[element][0]['DID']
                         SID = jsonValue[element][0]['SID']
                         search = sqlStatement.format(element, " DID = '" + DID + "'")
-                        print(search)
+                        # print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addChairInsert(cur, DID, SID)
@@ -359,7 +360,7 @@ def addDepartment():
                         SID = jsonValue[element][0]['SID']
                         CID = jsonValue[element][0]['CID']
                         search = sqlStatement.format(element, "SID = '" + SID + "' AND CID = '" + CID + "'")
-                        print(search)
+                        # print(search)
                         if not valueIsInDB(cur, search):
                             # insert
                             addCanEnrollInsert(cur, SID, CID)
@@ -378,17 +379,17 @@ def addDepartment():
                         Name = jsonValue[element][0]['Name']
                         Age = jsonValue[element][0]['Age']
                         search = sqlStatement.format(element, "SID = '" + SID + "'")
-                        print(search)
-                        print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
-                        print("After first check in db")
+                        # print(search)
+                        # print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
+                        # print("After first check in db")
                         if not valueIsInDB(cur, search):
                             # insert
                             addStaffInsert(cur, SID, DID, Name, Age)
-                            print("Running in db")
+                            # print("Running in db")
                             return render_template("insert.html", error = None)
                         else:
                             # ERROR value was already in the database.
-                            print("Error in staff valueIsInDB true")
+                            # print("Error in staff valueIsInDB true")
                             return render_template("insert.html", error = "Entry already exists in " + element)
                             
                     except:
@@ -512,13 +513,13 @@ def addDepartment():
                 with sql.connect('data.db') as con:
                     con.row_factory = sql.Row
                     cur = con.cursor()
-                    print("pre val")
+                    # print("pre val")
                     # pprint(jsonValue)
                     for val in jsonFile:
-                        print("Val is: " + str(val))
+                        # print("Val is: " + str(val))
                         for element in jsonFile[val]:
-                            print("Element is : " + str(element))
-                            print(val)
+                            # print("Element is : " + str(element))
+                            # print(val)
                             # if element["Department"]:
                             if val == "Department":
                                 try:
@@ -545,7 +546,7 @@ def addDepartment():
                                     Year = element['Year']
                                     Major = element['Major']
                                     search = sqlStatement.format(val, "StudentID = '" + StudentID + "'")
-                                    print(search)
+                                    # print(search)
                                     if not valueIsInDB(cur, search):
                                         # insert
                                         addStudentInsert(cur, StudentID, Name, Year, Major)
@@ -559,15 +560,15 @@ def addDepartment():
                                     return render_template("insert.html", error = "Invalid JSON. You must have four fields: StudentID, Name, Year, Major")
                                     
                             elif val == "Takes":
-                                print("We are in Takes...")
+                                # print("We are in Takes...")
                                 try:
                                     StudentID = element['StudentID']
                                     CID = element['CID']
                                     Semester = element['Semester']
                                     Year = element['Year']
-                                    print("Takes values")
+                                    # print("Takes values")
                                     search = sqlStatement.format(val, "StudentID = '" + StudentID + "' AND " + "CID = '" + CID + "' AND " + "Semester = '" + Semester + "' AND " + "Year = '" + Year + "'")
-                                    print(search)
+                                    # print(search)
                                     if not valueIsInDB(cur, search):
                                         # insert
                                         addTakesInsert(cur, StudentID, CID, Semester, Year)
@@ -585,7 +586,7 @@ def addDepartment():
                                     DID = element['DID']
                                     SID = element['SID']
                                     search = sqlStatement.format(val, " DID = '" + DID + "'")
-                                    print(search)
+                                    # print(search)
                                     if not valueIsInDB(cur, search):
                                         # insert
                                         addChairInsert(cur, DID, SID)
@@ -603,7 +604,7 @@ def addDepartment():
                                     SID = element['SID']
                                     CID = element['CID']
                                     search = sqlStatement.format(val, "SID = '" + SID + "' AND CID = '" + CID + "'")
-                                    print(search)
+                                    # print(search)
                                     if not valueIsInDB(cur, search):
                                         # insert
                                         addCanEnrollInsert(cur, SID, CID)
@@ -622,17 +623,17 @@ def addDepartment():
                                     Name = element['Name']
                                     Age = element['Age']
                                     search = sqlStatement.format(val, "SID = '" + SID + "'")
-                                    print(search)
-                                    print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
-                                    print("After first check in db")
+                                    # print(search)
+                                    # print("Is it in the db? " + 'str(valueIsInDB(cur, search))')
+                                    # print("After first check in db")
                                     if not valueIsInDB(cur, search):
                                         # insert
                                         addStaffInsert(cur, SID, DID, Name, Age)
-                                        print("Running in db")
+                                        # print("Running in db")
                                         #return render_template("insert.html", error = None)
                                     else:
                                         # ERROR value was already in the database.
-                                        print("Error in staff valueIsInDB true")
+                                        # print("Error in staff valueIsInDB true")
                                         #return render_template("insert.html", error = "Entry already exists in " + element)
                                         errorString += "Entry already exists in " + val + "\n"
                                 except:
@@ -694,15 +695,15 @@ def addDepartment():
                                     #ERROR  did not have a field did, name, or address
                                     return render_template("insert.html", error = "Invalid JSON. You must have three fields: SID, Tenure, RoomNumber")
                             elif val == "Admin":
-                                print("In admin correctly")
+                                # print("In admin correctly")
                                 try:
-                                    print("Starting getting SID")
+                                    # print("Starting getting SID")
                                     SID = element['SID']
-                                    print("Starting getting RoomNumber")
+                                    # print("Starting getting RoomNumber")
                                     RoomNumber = element['RoomNumber']
-                                    print("Starting getting search")
+                                    # print("Starting getting search")
                                     search = sqlStatement.format(val, "SID = '" + SID + "'")
-                                    print(search)
+                                    # print(search)
                                     if not valueIsInDB(cur, search):
                                         # insert
                                         addAdminInsert(cur, SID, RoomNumber)
@@ -758,7 +759,8 @@ def addDepartment():
                                 else:
                                     return render_template('insert.html', error = "ERROR: " + errorString, ran = 1)
             except:
-                print("Error in the bulk upload.")
+                # print("Error in the bulk upload.")
+                return render_template("inser.html", error + "Error in the bulk upload of your file.")
     return render_template("insert.html")
 
 
@@ -766,7 +768,7 @@ def addDepartment():
 # View Tables query based on name
 @app.route('/viewQuery', methods = ['POST', 'GET'])
 def viewQuery():
-    print("Running here")
+    # print("Running here")
     val = request.form['table']
     page = request.form['pageNo']
     perPage = request.form['perPage']
@@ -836,7 +838,7 @@ def queryCourse():
 def queryDepartment():
     val = request.form['dept_id']
     try:
-        print("Start")
+        # print("Start")
         con = sql.connect("data.db")
         con.row_factory = sql.Row
     
